@@ -17,6 +17,8 @@
         public DateTime? fecha_modificacion { get; set; }
         public bool es_activo { get; set; }
 
+        public Usuarios UsuarioCrear { get; set; }
+        public Usuarios UsuarioModificar { get; set; }
         public ICollection<Colaboradores> Colaboradores { get; set; }
         public ICollection<Transportistas> Transportistas { get; set; }
     }

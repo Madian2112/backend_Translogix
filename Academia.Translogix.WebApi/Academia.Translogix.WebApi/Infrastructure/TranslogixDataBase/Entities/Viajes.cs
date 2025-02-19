@@ -18,6 +18,9 @@
         public Sucursales Sucursal { get; set; }
         public Usuarios Usuario { get; set; }
         public Transportistas Transportista { get; set; }
+        public Usuarios UsuarioCrear { get; set; }
+        public Usuarios UsuarioModificar { get; set; }
+
         public ICollection<Viajes_Detalles> ViajesDetalles { get; set; }
 
     }

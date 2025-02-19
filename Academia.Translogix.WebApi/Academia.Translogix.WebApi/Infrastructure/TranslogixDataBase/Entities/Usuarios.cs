@@ -3,8 +3,8 @@
     public class Usuarios
     {
         public int usuario_id { get; set; }
-        public string nombre { get; set; }
-        public string clave { get; set; }
+        public string nombre { get; set; } = string.Empty;
+        public string clave { get; set; } = string.Empty;
         public bool es_admin { get; set; }
         public bool es_activo { get; set; }
         public int? usuario_creacion { get; set; }
@@ -14,7 +14,16 @@
         public int? rol_id { get; set; }
         public int? colaborador_id { get; set; }
 
-        public ICollection<Colaboradores> Colaboradores { get; set; }
+        public ICollection<Cargos> CargosCreacion { get; set; } = new HashSet<Cargos>();
+        public ICollection<Cargos> CargosModificacion { get; set; } = new HashSet<Cargos>();
+        public ICollection<Colaboradores> ColaboradoresCreacion { get; set; } = new HashSet<Colaboradores>();
+        public ICollection<Colaboradores> ColaboradoresModificacion { get; set; } = new HashSet<Colaboradores>();
+        public ICollection<Estados_Civiles> EstadosCivilesCreacion { get; set; } = new HashSet<Estados_Civiles>();
+        public ICollection<Estados_Civiles> EstadosCivilesModificacion { get; set; } = new HashSet<Estados_Civiles>();
+        public ICollection<Monedas> MonedasCreacion { get; set; } = new HashSet<Monedas>(); 
+        public ICollection<Monedas> MonedasModificacion { get; set; } = new HashSet<Monedas>(); 
+        public ICollection<Paises> PaisesCreacion { get; set; } = new HashSet<Paises>(); 
+        public ICollection<Paises> PaisesModifiacion { get; set; } = new HashSet<Paises>(); 
 
     }
 }

@@ -14,5 +14,7 @@
 
         public Viajes Viaje { get; set; }
         public Colaboradores Colaborador { get; set; }
+        public Usuarios UsuarioCrear { get; set; }
+        public Usuarios UsuarioModificar { get; set; }
     }
 }

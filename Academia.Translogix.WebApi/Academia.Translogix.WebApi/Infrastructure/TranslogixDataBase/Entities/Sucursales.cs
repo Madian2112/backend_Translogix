@@ -12,6 +12,8 @@
         public decimal latitud { get; set; }
         public decimal longitud { get; set; }
 
+        public Usuarios UsuarioCrear { get; set; }
+        public Usuarios UsuarioModificar { get; set; }
         public ICollection<Sucursales_Colaboradores> SucursalesColaboradores { get; set; }
     }
 }

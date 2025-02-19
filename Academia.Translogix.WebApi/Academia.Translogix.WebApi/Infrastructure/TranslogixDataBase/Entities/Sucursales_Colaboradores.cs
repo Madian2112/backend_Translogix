@@ -14,5 +14,9 @@
 
         public Colaboradores Colaborador { get; set; }
         public Sucursales Sucursal { get; set; }
+        public Usuarios UsuarioCrear { get; set; }
+        public Usuarios UsuarioModificar { get; set; }
+
+        
     }
 }

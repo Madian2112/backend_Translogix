@@ -10,5 +10,8 @@
         public int? usuario_modificacion { get; set; }
         public DateTime? fecha_modificacion { get; set; }
         public bool es_activo { get; set; }
+        
+        public Usuarios UsuarioCrear { get; set; }
+        public Usuarios UsuarioModificar { get; set; }
     }
 }
