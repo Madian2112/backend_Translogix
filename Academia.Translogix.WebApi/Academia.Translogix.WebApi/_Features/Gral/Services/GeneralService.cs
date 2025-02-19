@@ -62,6 +62,15 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             return _translogixDBContext.SaveChanges() > 0;
         }
 
+        public MonedasDto ObtenerMonedaPorId(int id)
+        {
+            var moneda = _translogixDBContext.Monedas
+                .AsNoTracking()
+                .FirstOrDefault(x => x.moneda_id == id);
+
+            return _mapper.Map<MonedasDto>(moneda);
+        }
+
         #endregion
 
         #region PAISES
