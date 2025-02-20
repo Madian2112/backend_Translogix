@@ -10,17 +10,17 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
     [ApiController]
     public class MonedaController : ControllerBase
     {
-        private readonly GeneralService _generalService;
+        private readonly MonedaService _monedaService;
 
-        public MonedaController(GeneralService generalService)
+        public MonedaController(MonedaService generalService)
         {
-            _generalService = generalService;
+            _monedaService = generalService;
         }
 
-        [HttpPost("ObtenerMonedas")]
-        public IActionResult ObtenerUsuarios([FromBody] PaisesDto dto)
+        [HttpGet("ObtenerMonedas")]
+        public IActionResult ObtenerUsuarios()
         {
-            var resultado = _generalService.InsertarPais(dto);
+            var resultado = _monedaService.ObtenerMonedas();
             return Ok(resultado);
         }
     }

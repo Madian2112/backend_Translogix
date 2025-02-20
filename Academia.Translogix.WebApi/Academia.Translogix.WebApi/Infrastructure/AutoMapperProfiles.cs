@@ -1,4 +1,6 @@
-﻿using Academia.Translogix.WebApi._Features.Gral.Dtos;
+﻿using Academia.Translogix.WebApi._Features.Acce.Dtos;
+using Academia.Translogix.WebApi._Features.Gral.Dtos;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using AutoMapper;
 
@@ -9,7 +11,16 @@ namespace Academia.Translogix.WebApi.Infrastructure
         public AutoMapperProfiles() 
         {
             CreateMap<Monedas, MonedasDto>().ReverseMap();
+            CreateMap<Monedas, MonedasDtoInsertar>().ReverseMap();
+            CreateMap<Monedas, MonedasDtoActualizar>().ReverseMap();
+
             CreateMap<Paises, PaisesDto>().ReverseMap();
+            CreateMap<Paises, PaisesDtoInsertar>().ReverseMap();
+            CreateMap<Paises, PaisesDtoActualizar>().ReverseMap();
+
+            CreateMap<Usuarios, UsuariosDto>().ReverseMap();
+            CreateMap<Usuarios, UsuariosDtoInsertar>().ReverseMap();
+            CreateMap<Usuarios, UsuariosDtoActualizar>().ReverseMap();
         }
     }
 }

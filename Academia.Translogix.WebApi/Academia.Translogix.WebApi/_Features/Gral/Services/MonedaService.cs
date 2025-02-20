@@ -7,15 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Translogix.WebApi._Features.Gral.Services
 {
-    public class GeneralService
+    public class MonedaService
     {
 
         private readonly TranslogixDBContext _translogixDBContext;
         private readonly IMapper _mapper;
 
-        public GeneralService(TranslogixDBContext translogixDBContext, IMapper mapper)
+        public MonedaService(TranslogixDBContext translogixDBContext, IMapper mapper)
         {
-            _translogixDBContext = translogixDBContext;
+            _translogixDBContext = translogixDBContext; 
             _mapper = mapper;
         }
 
@@ -39,7 +39,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 
         }
 
-        public bool InsertarMoneda(MonedasDto modelo)
+        public bool InsertarMoneda(MonedasDtoInsertar modelo)
         {
             var moneda = _mapper.Map<Monedas>(modelo);
 
@@ -48,7 +48,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             return _translogixDBContext.SaveChanges() > 0;
         }
 
-        public bool ActualizarMoneda(int id, MonedasDto monedaDto)
+        public bool ActualizarMoneda(int id, MonedasDtoActualizar monedaDto)
         {
             var monedaExistente = _translogixDBContext.Monedas.FirstOrDefault(x => x.moneda_id == id);
 
@@ -62,6 +62,21 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             return _translogixDBContext.SaveChanges() > 0;
         }
 
+        public bool EliminarMoneda(int id, bool es_activo)
+        {
+            var monedaExistente = _translogixDBContext.Monedas.FirstOrDefault(x => x.moneda_id == id);
+            if (monedaExistente == null)
+                return false;
+
+            monedaExistente.es_activo = es_activo;
+
+            _translogixDBContext.Entry(monedaExistente)
+                                 .Property(x => x.es_activo)
+                                 .IsModified = true;
+
+            return _translogixDBContext.SaveChanges() > 0;
+        }
+
         public MonedasDto ObtenerMonedaPorId(int id)
         {
             var moneda = _translogixDBContext.Monedas
@@ -71,17 +86,6 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             return _mapper.Map<MonedasDto>(moneda);
         }
 
-        #endregion
-
-        #region PAISES
-        public bool InsertarPais(PaisesDto dto)
-        {
-            var pais = _mapper.Map<Paises>(dto);
-
-            var result = _translogixDBContext.Paises.Add(pais);
-
-            return _translogixDBContext.SaveChanges() > 0;
-        }
         #endregion
 
     }

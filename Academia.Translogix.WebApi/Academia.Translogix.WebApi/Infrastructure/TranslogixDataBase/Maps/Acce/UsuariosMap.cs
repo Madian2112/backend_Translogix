@@ -13,11 +13,11 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps.Acce
             builder.Property(x => x.nombre).HasMaxLength(150).IsRequired();
             builder.Property(x => x.clave).IsRequired();
             builder.Property(x => x.es_admin).IsRequired();
-            builder.Property(x => x.colaborador_id).IsRequired();
-            builder.Property(x => x.rol_id).IsRequired();
+            builder.Property(x => x.colaborador_id).IsRequired(false);
+            builder.Property(x => x.rol_id).IsRequired(false);
 
-            builder.Property(x => x.usuario_creacion).IsRequired();
-            builder.Property(x => x.fecha_creacion).IsRequired();
+            builder.Property(x => x.usuario_creacion).IsRequired(false);
+            builder.Property(x => x.fecha_creacion).IsRequired(false);
             builder.Property(x => x.usuario_modificacion).IsRequired(false);
             builder.Property(x => x.fecha_modificacion).IsRequired(false);
             builder.Property(x => x.es_activo).IsRequired();

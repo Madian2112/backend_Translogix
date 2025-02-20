@@ -14,8 +14,8 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.
         public DateTime? fecha_creacion { get; set; }
         public int? usuario_modificacion { get; set; }
         public DateTime? fecha_modificacion { get; set; }
-        public int rol_id { get; set; }
-        public int colaborador_id { get; set; }
+        public int? rol_id { get; set; }
+        public int? colaborador_id { get; set; }
 
         public Roles Rol { get; set; } = null!;
         public Colaboradores Colaborador { get; set; } = null!;

@@ -14,9 +14,8 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps.Gral
         {
             builder.ToTable("Paises");
             builder.HasKey(x => x.pais_id);
-            builder.Property(x => x.prefijo).HasMaxLength(10).IsRequired();
+            builder.Property(x => x.prefijo).IsRequired();
             builder.Property(x => x.nombre).HasMaxLength(100).IsRequired();
-            builder.Property(x => x.pais_id).IsRequired();
 
             builder.Property(x => x.usuario_creacion).IsRequired();
             builder.Property(x => x.fecha_creacion).IsRequired();

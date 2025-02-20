@@ -1,3 +1,4 @@
+using Academia.Translogix.WebApi._Features.Acce.Services;
 using Academia.Translogix.WebApi._Features.Gral.Services;
 using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
@@ -45,7 +46,9 @@ builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(
 
 
 // Servicios de Aplicación
-builder.Services.AddTransient<GeneralService>();
+builder.Services.AddTransient<MonedaService>();
+builder.Services.AddTransient<PaisService>();
+builder.Services.AddTransient<UsuarioService>();
 
 
 // Instancia del mapeado
