@@ -25,10 +25,19 @@ namespace Academia.Translogix.WebApi.Controllers.Acce
         }
 
         [HttpGet("ObtenerUsuario{id}")]
-        public string ObtenerUsuario(int id)
+        public IActionResult ObtenerUsuario(int id)
         {
-            return "value";
+            var result = _usuarioService.ObtenerPorId(id);
+            return Ok(result);
         }
+
+        [HttpGet("InicioSesion{id}/{clave}")]
+        public IActionResult InicioSesion(int id, string clave)
+        {
+            var result = _usuarioService.InicioSesion(id,clave);
+            return Ok(result);
+        }
+
 
         [HttpPost("InsertarUsuario")]
         public IActionResult InsertarUsuario([FromBody] UsuariosDtoInsertar modelo)
@@ -46,9 +55,18 @@ namespace Academia.Translogix.WebApi.Controllers.Acce
             return Ok(result);
         }
 
-        [HttpDelete("EliminadoLogico{id}")]
-        public void EliminadoLogico(int id)
+        [HttpPatch("EliminadoLogico{id}")]
+        public IActionResult EliminadoLogico(int id)
         {
+            var result = _usuarioService.EliminadoLogico(id);
+            return Ok(result);
+        }
+
+        [HttpDelete("EliminadoNormal{id}")]
+        public IActionResult EliminadoNormal(int id)
+        {
+            var result = _usuarioService.EliminarCompletamente(id);
+            return Ok(result);
         }
     }
 }

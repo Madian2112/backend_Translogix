@@ -12,7 +12,6 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
 
     public class PaisesDtoInsertar
     {
-        public int pais_id { get; set; }
         [Required]
         public int prefijo { get; set; }
         [Required]

@@ -16,7 +16,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps.Gral
             builder.HasKey(x => x.moneda_id);
             builder.Property(x => x.nombre).HasMaxLength(100).IsRequired();
             builder.Property(x => x.abreviatura).HasMaxLength(10).IsRequired();
-            builder.Property(x => x.valor_lempira).HasColumnType("decimal(18,16)").IsRequired();
+            builder.Property(x => x.valor_lempira).HasColumnType("decimal(20,3)").IsRequired();
             builder.Property(x => x.pais_id).IsRequired();
 
             builder.Property(x => x.usuario_creacion).IsRequired();

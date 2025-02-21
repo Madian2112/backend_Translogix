@@ -12,9 +12,14 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
     public class UsuarioService : BaseService<Usuarios, UsuariosDto, UsuariosDtoInsertar, UsuariosDtoActualizar>
     {
 
+        private readonly TranslogixDBContext _context;
+        private readonly IMapper _mapper;
+
         public UsuarioService(TranslogixDBContext translogix, IMapper mapper)
             : base(translogix, mapper)
         {
+            _context = translogix;
+            _mapper = mapper;
         }
 
         private byte[] ConvertirClaveASha256(string clave)
@@ -31,10 +36,31 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
             return base.Insertar(modelo);
         }
 
-        public ApiResponse<string> Actualizar(UsuariosDtoInsertar modelo)
+        public ApiResponse<string> InicioSesion(int id, UsuariosDtoActualizar modelo)
         {
-            modelo.clave = ConvertirClaveASha256(modelo.claveinput);
-            return base.Actualizar(modelo);
+            return base.Actualizar(id,modelo);
+        }
+
+        public ApiResponse<UsuariosDto> InicioSesion(int id, string clave)
+        {
+            try
+            {
+                byte[] claveHash = ConvertirClaveASha256(clave);
+
+                var registro = _context.Set<Usuarios>().Where(x => x.usuario_id == id && x.clave == claveHash).FirstOrDefault();    
+
+                if (registro == null)
+                {
+                    return ApiResponseHelper.NotFound<UsuariosDto>("Registro no encontrado");
+                }
+
+                var registroDto = _mapper.Map<UsuariosDto>(registro);
+                return ApiResponseHelper.Success(registroDto, "Registro encontrado");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponseHelper.ErrorDto<UsuariosDto>($"Error al buscar registro:  {ex.Message}");
+            }
         }
 
     }

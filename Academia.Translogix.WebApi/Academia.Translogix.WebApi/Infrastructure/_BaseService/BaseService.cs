@@ -99,7 +99,7 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
             }
         }
 
-        public ApiResponse<string> EliminadoLogico(int id, bool esActivo)
+        public ApiResponse<string> EliminadoLogico(int id, bool esActivo = false)
         {
             try
             {
@@ -127,27 +127,27 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
                 return ApiResponseHelper.Error("Error al eliminar: " + ex.Message);
             }
         }
-public ApiResponse<string> EliminarCompletamente(int id)
-{
-    try
-    {
-        var registro = _context.Set<T>().Find(id);
-
-        if (registro == null)
+        public ApiResponse<string> EliminarCompletamente(int id)
         {
-            return ApiResponseHelper.NotFound<string>("Registro no encontrado");
+            try
+            {
+                var registro = _context.Set<T>().Find(id);
+
+                if (registro == null)
+                {
+                    return ApiResponseHelper.NotFound<string>("Registro no encontrado");
+                }
+
+                _context.Set<T>().Remove(registro);
+                _context.SaveChanges();
+
+                return ApiResponseHelper.SuccessMessage("Registro eliminado completamente con éxito");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponseHelper.Error("Error al eliminar completamente: " + ex.Message);
+            }
         }
-
-        _context.Set<T>().Remove(registro);
-        _context.SaveChanges();
-
-        return ApiResponseHelper.SuccessMessage("Registro eliminado completamente con éxito");
-    }
-    catch (Exception ex)
-    {
-        return ApiResponseHelper.Error("Error al eliminar completamente: " + ex.Message);
-    }
-}
 
         public async Task<string> TranslateToSpanish(string text)
         {
