@@ -3,6 +3,7 @@ using System.Net.Security;
 using System.Text.Json;
 using Academia.Translogix.WebApi.Infrastructure._ApiResponses;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,6 +66,7 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
         {
             try
             {
+                
                 var entidad = _mapper.Map<T>(modelo);
                 _context.Set<T>().Add(entidad);
                 _context.SaveChanges();
