@@ -6,7 +6,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.
     public class Colaboradores
     {
         public int colaborador_id { get; set; }
-        public string fecha_nacimiento { get; set; } = string.Empty;
+        public DateTime fecha_nacimiento { get; set; }
         public decimal latitud { get; set; }
         public decimal longitud { get; set; }
         public int estado_civil_id { get; set; }

@@ -9,7 +9,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps.Gral
         public void Configure(EntityTypeBuilder<Sucursales_Colaboradores> builder)
         {
             builder.ToTable("Sucursales_Colaboradores");
-            builder.HasKey(x => x.sucursal_id);
+            builder.HasKey(x => x.sucursal_empleado_id);
             builder.Property(x => x.distancia_empleado_sucursal_km).HasColumnType("decimal(10,2)").IsRequired();
             builder.Property(x => x.colaborador_id).IsRequired();
             builder.Property(x => x.sucursal_id).IsRequired();

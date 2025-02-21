@@ -46,7 +46,5 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Dtos
         public int usuario_modificacion { get; set; }
         [Required]
         public DateTime fecha_modificacion { get; set; } = DateTime.Now;
-        [Required]
-        public bool es_activo { get; set; }
     }
 }

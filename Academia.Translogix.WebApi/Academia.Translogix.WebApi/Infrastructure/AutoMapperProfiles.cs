@@ -27,6 +27,14 @@ namespace Academia.Translogix.WebApi.Infrastructure
             CreateMap<Sucursales, SucursalesDto>().ReverseMap();
             CreateMap<Sucursales, SucursalesDtoInsertar>().ReverseMap();
             CreateMap<Sucursales, SucursalesDtoActualizar>().ReverseMap();
+
+            CreateMap<Colaboradores, ColaboradoresDto>().ReverseMap();
+            CreateMap<Colaboradores, ColaboradoresDtoInsertar>().ReverseMap();
+            CreateMap<Colaboradores, ColaboradoresDtoActualizar>().ReverseMap();
+
+            CreateMap<Sucursales_Colaboradores, SucursalesColaboradoresDto>().ReverseMap();
+            CreateMap<Sucursales_Colaboradores, SucursalesColaboradoresInsertarDto>().ReverseMap();
+            CreateMap<Sucursales_Colaboradores, SucursalesColaboradoresActualizarDto>().ReverseMap();
         }
     }
 }

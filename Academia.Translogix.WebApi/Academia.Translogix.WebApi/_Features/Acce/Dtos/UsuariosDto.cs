@@ -45,8 +45,6 @@ namespace Academia.Translogix.WebApi._Features.Acce.Dtos
         [Required]
         public bool es_admin { get; set; } = false;
         [Required]
-        public bool es_activo { get; set; } = true;
-        [Required]
         public int usuario_modificacion { get; set; }
         [Required]
         public DateTime fecha_modificacion { get; set; } = DateTime.Now;

@@ -16,6 +16,9 @@ namespace Academia.Translogix.WebApi.Infrastructure
             service.AddScoped<MonedaService>();
             service.AddScoped<PaisService>();
             service.AddScoped<SucursalService>();
+            service.AddScoped<SucursalColaboradorService>();
+            service.AddScoped<ColaboradorService>();
+            service.AddScoped<GoogleMapsService>();
         }
     }
 }
