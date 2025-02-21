@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Academia.Translogix.WebApi._Features.Gral.Dtos
 {
@@ -17,11 +18,11 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         [Required]
         [MaxLength(100)]
         public string nombre { get; set; } = string.Empty;
-        [Required]
-        public int usuario_creacion { get; set; }
-        [Required]
+        [JsonIgnore]
+        public int usuario_creacion { get; set; } = 3;
+        [JsonIgnore]
         public DateTime fecha_creacion { get; set; } = DateTime.Now;
-        [Required]
+        [JsonIgnore]
         public bool es_activo { get; set; } = true;
     }
 
@@ -32,8 +33,9 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         [Required]
         [MaxLength(100)]
         public string nombre { get; set; } = string.Empty;
-        public int usuario_modificacion { get; set; }
-        [Required]
+        [JsonIgnore]
+        public int usuario_modificacion { get; set; } = 3;
+        [JsonIgnore]
         public DateTime fecha_modificacion { get; set; } = DateTime.Now;
     }
 }
