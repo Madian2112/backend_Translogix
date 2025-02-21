@@ -34,10 +34,10 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
         }
 
         [HttpPost("InsertarSucursalColaborador")]
-        public IActionResult InsertarSucursalColaborador([FromBody] SucursalesColaboradoresInsertarDto modelo)
+        public async Task<IActionResult> InsertarSucursalColaborador([FromBody] SucursalesColaboradoresInsertarDto modelo)
         {
-            var result = _sucursalColaboradorService.Insertar(modelo);
-            return Ok(result);
+            var resultado = await _sucursalColaboradorService.InsertarAsync(modelo);
+            return Ok(resultado);
         }
 
         [HttpPut("ActualizarSucursalColaborador{id}")]

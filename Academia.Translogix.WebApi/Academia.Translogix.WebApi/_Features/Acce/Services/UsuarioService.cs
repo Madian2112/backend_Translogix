@@ -22,7 +22,7 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
             _mapper = mapper;
         }
 
-        private byte[] ConvertirClaveASha256(string clave)
+        private byte[] ConvertirClave(string clave)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -32,7 +32,7 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
 
         public ApiResponse<string> Insertar(UsuariosDtoInsertar modelo)
         {
-            modelo.clave = ConvertirClaveASha256(modelo.claveinput);
+            modelo.clave = ConvertirClave(modelo.claveinput);
             return base.Insertar(modelo);
         }
 
@@ -45,7 +45,7 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
         {
             try
             {
-                byte[] claveHash = ConvertirClaveASha256(clave);
+                byte[] claveHash = ConvertirClave(clave);
 
                 var registro = _context.Set<Usuarios>().Where(x => x.usuario_id == id && x.clave == claveHash).FirstOrDefault();    
 
