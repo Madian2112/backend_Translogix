@@ -1,10 +1,12 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
     public class Monedas
     {
+        [Key]
         public int moneda_id { get; set; }
         public string nombre { get; set; } = string.Empty;
         public string abreviatura { get; set; } = string.Empty;

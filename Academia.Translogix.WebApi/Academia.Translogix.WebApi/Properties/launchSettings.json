@@ -4,7 +4,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:64948",
+      "applicationUrl": "http://localhost:64947",
       "sslPort": 0
     }
   },
@@ -15,14 +15,14 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5093",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CODIGO_PAIS": "HN",
-        "FS_SQL_SUFASA_SERVER": "192.168.1.33\\academiagfs,49194",
-        "FS_SQL_SUFASA_DBNAME": "translogix",
-        "FS_SQL_SUFASA_USER": "AcademiaDEV",
-        "FS_SQL_SUFASA_PASSWORD": "Academia.1"
-      }
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development",
+            "CODIGO_PAIS": "HN",
+            "FS_SQL_SUFASA_SERVER": "192.168.1.33\\academiagfs,49194",
+            "FS_SQL_SUFASA_DBNAME": "translogix",
+            "FS_SQL_SUFASA_USER": "AcademiaDEV",
+            "FS_SQL_SUFASA_PASSWORD": "Academia.1"
+        }
     },
     "IIS Express": {
       "commandName": "IISExpress",

@@ -1,4 +1,4 @@
-﻿namespace Academia.Translogix.WebApi.Infrastructure._ApiResponses
+﻿namespace Academia.Translogix.WebApi.Common._ApiResponses
 {
     public class ApiResponse<T>
     {

@@ -1,4 +1,4 @@
-﻿namespace Academia.Translogix.WebApi.Infrastructure._ApiResponses
+﻿namespace Academia.Translogix.WebApi.Common._ApiResponses
 {
 
     public static class ApiResponseHelper
@@ -41,7 +41,7 @@
             var response = new ApiResponse<T>(
                 success: false,
                 message: message,
-                data: default(T),
+                data: default,
                 statusCode: 400
             );
             return response;
@@ -52,7 +52,7 @@
             var response = new ApiResponse<T>(
                 success: false,
                 message: message,
-                data: default(T),
+                data: default,
                 statusCode: 404
             );
             return response;

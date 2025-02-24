@@ -1,31 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Net.Security;
 using System.Text.Json;
-using Academia.Translogix.WebApi.Infrastructure._ApiResponses;
+using Academia.Translogix.WebApi.Common._ApiResponses;
+using Academia.Translogix.WebApi.Common._BaseDomain;
+using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using AutoMapper;
+using Farsiman.Domain.Core.Standard.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Academia.Translogix.WebApi.Infrastructure._BaseService
+namespace Academia.Translogix.WebApi.Common._BaseService
 {
     public class BaseService<T, TDto, TDtoInsertar, TDtoActualizar> : IBaseService<T, TDto, TDtoInsertar, TDtoActualizar>
         where T : class
+        where TDtoInsertar : class
+        where TDtoActualizar : class
     {
-        private readonly TranslogixDBContext _context;
         private readonly IMapper _mapper;
-
-        public BaseService(TranslogixDBContext context, IMapper mapper)
+        private readonly UnitOfWorkBuilder _unitOfWorkBuilder;
+        private readonly IUnitOfWork _context;
+        public BaseService(IMapper mapper, UnitOfWorkBuilder unitOfWorkBuilder)
         {
-            _context = context;
             _mapper = mapper;
+            _unitOfWorkBuilder = unitOfWorkBuilder;
+            _context = _unitOfWorkBuilder.BuildDbTranslogix();
         }
 
         public ApiResponse<List<TDto>> ObtenerTodos()
         {
             try
             {
-                var lista = _context.Set<T>().AsQueryable().AsNoTracking().ToList();
+                var lista = _context.Repository<T>().AsQueryable().AsNoTracking().ToList();
 
                 var listaDto = _mapper.Map<List<TDto>>(lista);
 
@@ -34,7 +40,7 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
             catch (Exception ex)
             {
                 var response = ApiResponseHelper.ErrorDto<List<TDto>>("Error al obtener registros: " + ex.Message);
-                if(response.Data == null)
+                if (response.Data == null)
                 {
                     response.Data = [];
                 }
@@ -44,16 +50,31 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
 
         public ApiResponse<TDto> ObtenerPorId(int id)
         {
+
             try
             {
-                var registro = _context.Set<T>().Find(id);
+                string pkId = "";
+                var properties = typeof(T).GetProperties();
+                foreach (var property in properties)
+                {
+                    bool isKey = property.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.KeyAttribute), false).Length > 0;
+                    if (isKey)
+                    {
+                        pkId = property.Name;
+                        break;
+                    }
+                }
 
+                var registro = _context.Repository<T>().AsQueryable().AsNoTracking()
+                            .FirstOrDefault(x => EF.Property<int>(x, pkId) == id);
+
+
+                var registroDto = _mapper.Map<TDto>(registro);
                 if (registro == null)
                 {
                     return ApiResponseHelper.NotFound<TDto>("Registro no encontrado");
                 }
 
-                var registroDto = _mapper.Map<TDto>(registro);
                 return ApiResponseHelper.Success(registroDto, "Registro encontrado");
             }
             catch (Exception ex)
@@ -64,11 +85,17 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
 
         public ApiResponse<string> Insertar(TDtoInsertar modelo)
         {
+
             try
             {
-                
+                var result = BaseDomainHelpers.ValidarCamposNulos(modelo);
+                if(result.StatusCode != 200)
+                {
+                    return ApiResponseHelper.Error("No se aceptan valores nulos");
+                }
+
                 var entidad = _mapper.Map<T>(modelo);
-                _context.Set<T>().Add(entidad);
+                _context.Repository<T>().Add(entidad);
                 _context.SaveChanges();
 
                 return ApiResponseHelper.SuccessMessage("Registro guardado con éxito");
@@ -81,9 +108,17 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
 
         public ApiResponse<string> Actualizar(int id, TDtoActualizar modelo)
         {
+            var _context = _unitOfWorkBuilder.BuildDbTranslogix();
+
             try
             {
-                var registroExistente = _context.Set<T>().Find(id);
+                var result = BaseDomainHelpers.ValidarCamposNulos(modelo);
+                if (!(result.StatusCode == 2000))
+                {
+                    return ApiResponseHelper.Error("No se aceptan valores nulos");
+                }
+
+                var registroExistente = _context.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registroExistente == null)
                 {
@@ -103,9 +138,11 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
 
         public ApiResponse<string> EliminadoLogico(int id, bool esActivo = false)
         {
+            var _context = _unitOfWorkBuilder.BuildDbTranslogix();
+
             try
             {
-                var registro = _context.Set<T>().Find(id);
+                var registro = _context.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registro == null)
                 {
@@ -131,16 +168,18 @@ namespace Academia.Translogix.WebApi.Infrastructure._BaseService
         }
         public ApiResponse<string> EliminarCompletamente(int id)
         {
+            var _context = _unitOfWorkBuilder.BuildDbTranslogix();
+
             try
             {
-                var registro = _context.Set<T>().Find(id);
+                var registro = _context.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registro == null)
                 {
                     return ApiResponseHelper.NotFound<string>("Registro no encontrado");
                 }
 
-                _context.Set<T>().Remove(registro);
+                //_context.Repository<T>().Remove(registro);
                 _context.SaveChanges();
 
                 return ApiResponseHelper.SuccessMessage("Registro eliminado completamente con éxito");

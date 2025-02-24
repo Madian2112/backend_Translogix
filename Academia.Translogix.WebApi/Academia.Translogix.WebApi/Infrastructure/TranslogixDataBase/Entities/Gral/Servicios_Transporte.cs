@@ -1,9 +1,11 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
     public class Servicios_Transporte
     {
+        [Key]
         public int servicio_transporte_id { get; set; }
         public string nombre { get; set; } = string.Empty;
         public string telefono { get; set; } = string.Empty;

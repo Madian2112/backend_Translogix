@@ -1,10 +1,12 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce
 {
     public class Usuarios
     {
+        [Key]
         public int usuario_id { get; set; }
         public string nombre { get; set; } = string.Empty;
         public byte[] clave { get; set; } = null!;

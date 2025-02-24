@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using Academia.Translogix.WebApi._Features.Gral.Dtos;
 using Academia.Translogix.WebApi._Features.Viaj;
 using Academia.Translogix.WebApi._Features.Viaj.Dtos;
-using Academia.Translogix.WebApi.Infrastructure._ApiResponses;
-using Academia.Translogix.WebApi.Infrastructure._BaseService;
+using Academia.Translogix.WebApi.Common._ApiResponses;
+using Academia.Translogix.WebApi.Common._BaseService;
+using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
 using AutoMapper;
+using Farsiman.Domain.Core.Standard.Repositories;
 using Microsoft.EntityFrameworkCore;
 using static Academia.Translogix.WebApi._Features.Gral.Services.GoogleMapsService;
 
@@ -21,30 +24,31 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
         private readonly GoogleMapsService _googleMapsService;
         private readonly ColaboradorService _colaboradorService;
         private readonly SucursalService _sucursalService;
-        private readonly TranslogixDBContext _context;
         private readonly IMapper _mapper;
-        public SucursalColaboradorService(TranslogixDBContext translogixDBContext, 
-                                          IMapper mapper, 
+        private readonly IUnitOfWork _context;
+
+        public SucursalColaboradorService(IMapper mapper,
+            UnitOfWorkBuilder unitOfWork,
                                           GoogleMapsService googleMapsService, 
                                           ColaboradorService colaboradorService,
                                           SucursalService sucursalService)
-            : base(translogixDBContext, mapper)
+            : base(mapper, unitOfWork)
         {
             _googleMapsService = googleMapsService;
             _mapper = mapper;
             _colaboradorService = colaboradorService;
             _sucursalService = sucursalService;
-            _context = translogixDBContext;
+            _context = unitOfWork.BuildDbTranslogix();
         }
 
         public async Task<ApiResponse<string>> InsertarAsync(SucursalesColaboradoresInsertarDto modelo)
         {
             var entidad = _mapper.Map<Sucursales_Colaboradores>(modelo);
 
-            var resulColaboradores =  _context.Colaboradores.AsQueryable().AsNoTracking()
+            var resulColaboradores =  _context.Repository<Colaboradores>().AsQueryable().AsNoTracking()
                 .FirstOrDefault(x => x.colaborador_id == entidad.colaborador_id);
 
-            var resulSucursales = _context.Sucursales.AsQueryable().AsNoTracking()
+            var resulSucursales = _context.Repository<Sucursales>().AsQueryable().AsNoTracking()
                 .FirstOrDefault(x => x.sucursal_id == entidad.sucursal_id);
 
             if (resulColaboradores == null || resulSucursales == null)
@@ -101,7 +105,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             try
             {
                 var entidad = _mapper.Map<Sucursales_Colaboradores>(modelo);
-                _context.Set<Sucursales_Colaboradores>().Add(entidad);
+                _context.Repository<Sucursales_Colaboradores>().Add(entidad);
                 await _context.SaveChangesAsync(); // Nota: Usé await aquí
                 return ApiResponseHelper.SuccessMessage("Registro guardado con éxito");
             }

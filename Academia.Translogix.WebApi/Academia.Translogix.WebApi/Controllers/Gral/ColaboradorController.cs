@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Academia.Translogix.WebApi._Features.Gral.Dtos;
 using Academia.Translogix.WebApi._Features.Gral.Services;
-using Academia.Translogix.WebApi.Infrastructure._BaseService;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using Microsoft.AspNetCore.Mvc;
 

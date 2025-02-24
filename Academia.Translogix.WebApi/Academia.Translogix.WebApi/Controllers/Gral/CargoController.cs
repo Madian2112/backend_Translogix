@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Academia.Translogix.WebApi._Features.Gral.Dtos;
+﻿using Academia.Translogix.WebApi._Features.Gral.Dtos;
 using Academia.Translogix.WebApi._Features.Gral.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Academia.Translogix.WebApi.Controllers.Gral
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class CargoController : ControllerBase
     {
         private readonly CargoService _cargoService;

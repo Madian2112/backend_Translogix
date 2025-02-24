@@ -17,7 +17,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         public string nombre { get; set; } = string.Empty;
         public bool es_activo { get; set; }
         public DateTime fecha_creacion { get; set; }
-        public int? usuario_modificacion { get; set; }
+        public int usuario_creacion { get; set; }
     }
 
     public class EstadosCivilesDtoActualizar
@@ -25,6 +25,6 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         public int estado_civil_id { get; set; }
         public string nombre { get; set; } = string.Empty;
         public DateTime fecha_modificacion { get; set; }
-        public int? usuario_modificacion { get; set; }
+        public int usuario_modificacion { get; set; }
     }
 }

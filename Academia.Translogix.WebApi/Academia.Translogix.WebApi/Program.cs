@@ -1,7 +1,10 @@
 using Academia.Translogix.WebApi._Features.Acce.Services;
 using Academia.Translogix.WebApi._Features.Gral.Services;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
+using Farsiman.Extensions.Configuration;
+
 // using Farsiman.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -41,8 +44,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(
-                builder.Configuration.GetConnectionString("LOGISTIC_GFS")));
+                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")));
 
+builder.Services.AddScoped<UnitOfWorkBuilder>();
 
 // Servicios de Aplicaci�n
 ServiceConfiguration.ConfiguracionServicios(builder.Services);

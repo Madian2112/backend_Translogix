@@ -1,10 +1,12 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
     public class Colaboradores
     {
+        [Key]
         public int colaborador_id { get; set; }
         public DateTime fecha_nacimiento { get; set; }
         public decimal latitud { get; set; }

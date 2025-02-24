@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Academia.Translogix.WebApi._Features.Gral.Services;
 using Academia.Translogix.WebApi._Features.Viaj.Dtos;
 using Academia.Translogix.WebApi._Features.Viaj.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Academia.Translogix.WebApi.Controllers.Viaj
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class TarifaController : ControllerBase
     {
         private readonly TarifaService _tarifaService;
@@ -52,6 +50,6 @@ namespace Academia.Translogix.WebApi.Controllers.Viaj
         {
             var result = _tarifaService.EliminadoLogico(id, prop);
             return Ok(result);
-        } 
+        }
     }
 }

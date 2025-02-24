@@ -1,10 +1,12 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj
 {
     public class Transportistas
     {
+        [Key]
         public int transportista_id { get; set; }
         public int? moneda_id { get; set; }
         public int persona_id { get; set; }

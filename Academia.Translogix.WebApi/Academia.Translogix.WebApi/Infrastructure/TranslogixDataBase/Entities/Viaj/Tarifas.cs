@@ -1,9 +1,11 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj
 {
     public class Tarifas
     {
+        [Key]
         public int tarifa_id { get; set; }
         public decimal precio_km { get; set; }
         public int usuario_creacion { get; set; }

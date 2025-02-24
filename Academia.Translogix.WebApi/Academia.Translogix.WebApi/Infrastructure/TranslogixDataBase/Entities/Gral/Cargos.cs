@@ -1,9 +1,12 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
     public class Cargos
     {
+        [Key]
         public int cargo_id { get; set; }
         public string nombre { get; set; } = string.Empty;
         public int usuario_creacion { get; set; }

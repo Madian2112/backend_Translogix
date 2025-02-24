@@ -36,7 +36,8 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
         [HttpPost("InsertarSucursalColaborador")]
         public async Task<IActionResult> InsertarSucursalColaborador([FromBody] SucursalesColaboradoresInsertarDto modelo)
         {
-            var resultado = await _sucursalColaboradorService.InsertarAsync(modelo);
+            //var resultado = await _sucursalColaboradorService.InsertarAsync(modelo);
+            var resultado =  _sucursalColaboradorService.Insertar(modelo);
             return Ok(resultado);
         }
 

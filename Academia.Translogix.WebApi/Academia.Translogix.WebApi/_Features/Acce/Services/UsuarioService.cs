@@ -1,9 +1,12 @@
 ﻿using Academia.Translogix.WebApi._Features.Acce.Dtos;
-using Academia.Translogix.WebApi.Infrastructure._ApiResponses;
-using Academia.Translogix.WebApi.Infrastructure._BaseService;
+using Academia.Translogix.WebApi.Common._ApiResponses;
+using Academia.Translogix.WebApi.Common._BaseService;
+using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using AutoMapper;
+using Farsiman.Domain.Core.Standard;
+using Farsiman.Domain.Core.Standard.Repositories;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,14 +15,16 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
     public class UsuarioService : BaseService<Usuarios, UsuariosDto, UsuariosDtoInsertar, UsuariosDtoActualizar>
     {
 
-        private readonly TranslogixDBContext _context;
         private readonly IMapper _mapper;
+        private readonly UnitOfWorkBuilder _unitOfWorkBuilder;
+        private readonly IUnitOfWork _context;
 
-        public UsuarioService(TranslogixDBContext translogix, IMapper mapper)
-            : base(translogix, mapper)
+        public UsuarioService(IMapper mapper, UnitOfWorkBuilder unitOfWorkBuilder)
+            : base(mapper, unitOfWorkBuilder)
         {
-            _context = translogix;
             _mapper = mapper;
+            _unitOfWorkBuilder = unitOfWorkBuilder;
+            _context = _unitOfWorkBuilder.BuildDbTranslogix();
         }
 
         private byte[] ConvertirClave(string clave)
@@ -47,7 +52,7 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
             {
                 byte[] claveHash = ConvertirClave(clave);
 
-                var registro = _context.Set<Usuarios>().Where(x => x.usuario_id == id && x.clave == claveHash).FirstOrDefault();    
+                var registro = _context.Repository<Usuarios>().Where(x => x.usuario_id == id && x.clave == claveHash).FirstOrDefault();    
 
                 if (registro == null)
                 {

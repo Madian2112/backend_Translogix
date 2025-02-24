@@ -16,6 +16,10 @@ namespace Academia.Translogix.WebApi.Infrastructure
             CreateMap<Monedas, MonedasDtoInsertar>().ReverseMap();
             CreateMap<Monedas, MonedasDtoActualizar>().ReverseMap();
 
+            CreateMap<Cargos, CargosDto>().ReverseMap();
+            CreateMap<Cargos, CargosDtoInsertar>().ReverseMap();
+            CreateMap<Cargos, CargosDtoActualizar>().ReverseMap();
+
             CreateMap<Paises, PaisesDto>().ReverseMap();
             CreateMap<Paises, PaisesDtoInsertar>().ReverseMap();
             CreateMap<Paises, PaisesDtoActualizar>().ReverseMap();
@@ -24,6 +28,14 @@ namespace Academia.Translogix.WebApi.Infrastructure
             CreateMap<Usuarios, UsuariosDtoInsertar>().ReverseMap();
             CreateMap<Usuarios, UsuariosDtoActualizar>().ReverseMap();
 
+            CreateMap<Roles, RolesDto>().ReverseMap();
+            CreateMap<Roles, RolesDtoInsertar>().ReverseMap();
+            CreateMap<Roles, RolesDtoActualizar>().ReverseMap();
+
+            CreateMap<Tarifas, TarifasDto>().ReverseMap();
+            CreateMap<Tarifas, TarifasDtoInsertar>().ReverseMap();
+            CreateMap<Tarifas, TarifasDtoActualizar>().ReverseMap();
+
             CreateMap<Sucursales, SucursalesDto>().ReverseMap();
             CreateMap<Sucursales, SucursalesDtoInsertar>().ReverseMap();
             CreateMap<Sucursales, SucursalesDtoActualizar>().ReverseMap();
@@ -31,6 +43,10 @@ namespace Academia.Translogix.WebApi.Infrastructure
             CreateMap<Colaboradores, ColaboradoresDto>().ReverseMap();
             CreateMap<Colaboradores, ColaboradoresDtoInsertar>().ReverseMap();
             CreateMap<Colaboradores, ColaboradoresDtoActualizar>().ReverseMap();
+
+            CreateMap<Estados_Civiles, EstadosCivilesDto>().ReverseMap();
+            CreateMap<Estados_Civiles, EstadosCivilesDtoInsertar>().ReverseMap();
+            CreateMap<Estados_Civiles, EstadosCivilesDtoActualizar>().ReverseMap();
 
             CreateMap<Sucursales_Colaboradores, SucursalesColaboradoresDto>().ReverseMap();
             CreateMap<Sucursales_Colaboradores, SucursalesColaboradoresInsertarDto>().ReverseMap();

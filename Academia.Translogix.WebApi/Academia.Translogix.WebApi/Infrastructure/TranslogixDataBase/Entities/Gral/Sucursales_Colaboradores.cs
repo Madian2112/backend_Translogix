@@ -1,10 +1,12 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.ComponentModel.DataAnnotations;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj
 {
     public class Sucursales_Colaboradores
     {
+        [Key]
         public int sucursal_empleado_id { get; set; }
         public decimal distancia_empleado_sucursal_km { get; set; }
         public int colaborador_id { get; set; }

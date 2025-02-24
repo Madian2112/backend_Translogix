@@ -1,6 +1,6 @@
-﻿using Academia.Translogix.WebApi.Infrastructure._ApiResponses;
+﻿using Academia.Translogix.WebApi.Common._ApiResponses;
 
-namespace Academia.Translogix.WebApi.Infrastructure._BaseService
+namespace Academia.Translogix.WebApi.Common._BaseService
 {
     public interface IBaseService<T, TDto, TDtoInsertar, TDtoActualizar>
         where T : class
