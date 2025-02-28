@@ -44,7 +44,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(
-                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")));
+                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")),
+                ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<UnitOfWorkBuilder>();
 

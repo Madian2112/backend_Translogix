@@ -19,19 +19,19 @@ namespace Academia.Translogix.WebApi.Common._BaseService
     {
         private readonly IMapper _mapper;
         private readonly UnitOfWorkBuilder _unitOfWorkBuilder;
-        private readonly IUnitOfWork _context;
+        private readonly IUnitOfWork _unitOfWork;
         public BaseService(IMapper mapper, UnitOfWorkBuilder unitOfWorkBuilder)
         {
             _mapper = mapper;
             _unitOfWorkBuilder = unitOfWorkBuilder;
-            _context = _unitOfWorkBuilder.BuildDbTranslogix();
+            _unitOfWork = _unitOfWorkBuilder.BuildDbTranslogix();
         }
 
         public ApiResponse<List<TDto>> ObtenerTodos()
         {
             try
             {
-                var lista = _context.Repository<T>().AsQueryable().AsNoTracking().ToList();
+                var lista = _unitOfWork.Repository<T>().AsQueryable().AsNoTracking().ToList();
 
                 var listaDto = _mapper.Map<List<TDto>>(lista);
 
@@ -65,7 +65,7 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                     }
                 }
 
-                var registro = _context.Repository<T>().AsQueryable().AsNoTracking()
+                var registro = _unitOfWork.Repository<T>().AsQueryable().AsNoTracking()
                             .FirstOrDefault(x => EF.Property<int>(x, pkId) == id);
 
 
@@ -88,15 +88,15 @@ namespace Academia.Translogix.WebApi.Common._BaseService
 
             try
             {
-                var result = BaseDomainHelpers.ValidarCamposNulos(modelo);
-                if(result.StatusCode != 200)
+                var result = BaseDomainHelpers.ValidarCamposNulosVacios(modelo);
+                if(!result.Success)
                 {
                     return ApiResponseHelper.Error("No se aceptan valores nulos");
                 }
 
                 var entidad = _mapper.Map<T>(modelo);
-                _context.Repository<T>().Add(entidad);
-                _context.SaveChanges();
+                _unitOfWork.Repository<T>().Add(entidad);
+                _unitOfWork.SaveChanges();
 
                 return ApiResponseHelper.SuccessMessage("Registro guardado con éxito");
             }
@@ -108,17 +108,15 @@ namespace Academia.Translogix.WebApi.Common._BaseService
 
         public ApiResponse<string> Actualizar(int id, TDtoActualizar modelo)
         {
-            var _context = _unitOfWorkBuilder.BuildDbTranslogix();
-
             try
             {
-                var result = BaseDomainHelpers.ValidarCamposNulos(modelo);
+                var result = BaseDomainHelpers.ValidarCamposNulosVacios(modelo);
                 if (!(result.StatusCode == 2000))
                 {
                     return ApiResponseHelper.Error("No se aceptan valores nulos");
                 }
 
-                var registroExistente = _context.Repository<T>().AsQueryable().Select(x => x.Equals(id));
+                var registroExistente = _unitOfWork.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registroExistente == null)
                 {
@@ -126,7 +124,7 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                 }
 
                 _mapper.Map(modelo, registroExistente);
-                _context.SaveChanges();
+                _unitOfWork.SaveChanges();
 
                 return ApiResponseHelper.SuccessMessage("Registro actualizado con éxito");
             }
@@ -138,11 +136,10 @@ namespace Academia.Translogix.WebApi.Common._BaseService
 
         public ApiResponse<string> EliminadoLogico(int id, bool esActivo = false)
         {
-            var _context = _unitOfWorkBuilder.BuildDbTranslogix();
 
             try
             {
-                var registro = _context.Repository<T>().AsQueryable().Select(x => x.Equals(id));
+                var registro = _unitOfWork.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registro == null)
                 {
@@ -157,7 +154,7 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                 }
 
                 propiedadActivo.SetValue(registro, esActivo);
-                _context.SaveChanges();
+                _unitOfWork.SaveChanges();
 
                 return ApiResponseHelper.SuccessMessage("Registro eliminado con éxito");
             }
@@ -168,19 +165,18 @@ namespace Academia.Translogix.WebApi.Common._BaseService
         }
         public ApiResponse<string> EliminarCompletamente(int id)
         {
-            var _context = _unitOfWorkBuilder.BuildDbTranslogix();
 
             try
             {
-                var registro = _context.Repository<T>().AsQueryable().Select(x => x.Equals(id));
+                var registro = _unitOfWork.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registro == null)
                 {
                     return ApiResponseHelper.NotFound<string>("Registro no encontrado");
                 }
 
-                //_context.Repository<T>().Remove(registro);
-                _context.SaveChanges();
+                //_unitOfWork.Repository<T>().Remove(registro);
+                _unitOfWork.SaveChanges();
 
                 return ApiResponseHelper.SuccessMessage("Registro eliminado completamente con éxito");
             }

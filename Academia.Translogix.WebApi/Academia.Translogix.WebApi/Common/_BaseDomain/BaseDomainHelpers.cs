@@ -1,10 +1,11 @@
-﻿using Academia.Translogix.WebApi.Common._ApiResponses;
+﻿using System.Text.Json.Serialization;
+using Academia.Translogix.WebApi.Common._ApiResponses;
 
 namespace Academia.Translogix.WebApi.Common._BaseDomain
 {
     public static class BaseDomainHelpers
     {
-        public static ApiResponse<T> ValidarCamposNulos<T>(T dto) where T : class
+        public static ApiResponse<T> ValidarCamposNulosVacios<T>(T dto) where T : class
         {
             if (dto == null)
             {
@@ -17,54 +18,54 @@ namespace Academia.Translogix.WebApi.Common._BaseDomain
             }
 
             var properties = typeof(T).GetProperties();
+            var errorMessages = new List<string>(); 
+
             foreach (var property in properties)
             {
-                var value = property.GetValue(dto);
-
-                // Validar propiedades según su tipo
-                if (value == null)
+                if (Attribute.IsDefined(property, typeof(JsonIgnoreAttribute)))
                 {
-                    return new ApiResponse<T>(
-                        success: false,
-                        message: $"El campo {property.Name} no puede ser nulo",
-                        data: dto,
-                        statusCode: 400
-                    );
+                    continue;
                 }
 
-                // Validar strings vacíos
+                var value = property.GetValue(dto);
+
+                if (value == null)
+                {
+                    errorMessages.Add($"El campo '{property.Name}' no puede ser nulo");
+                    continue; 
+                }
+
                 if (property.PropertyType == typeof(string))
                 {
                     string stringValue = value as string;
                     if (string.IsNullOrWhiteSpace(stringValue))
                     {
-                        return new ApiResponse<T>(
-                            success: false,
-                            message: $"El campo {property.Name} no puede estar vacío",
-                            data: dto,
-                            statusCode: 400
-                        );
+                        errorMessages.Add($"El campo '{property.Name}' no puede estar vacío");
                     }
                 }
 
-                // Validar colecciones vacías (si aplica)
                 if (typeof(System.Collections.IEnumerable).IsAssignableFrom(property.PropertyType) &&
                     property.PropertyType != typeof(string))
                 {
                     var collection = value as System.Collections.IEnumerable;
                     if (collection != null && !collection.GetEnumerator().MoveNext())
                     {
-                        return new ApiResponse<T>(
-                            success: false,
-                            message: $"El campo {property.Name} no puede estar vacío",
-                            data: dto,
-                            statusCode: 400
-                        );
+                        errorMessages.Add($"El campo '{property.Name}' no puede estar vacío");
                     }
                 }
             }
 
-            // Si todo está bien
+            if (errorMessages.Count > 0)
+            {
+                string combinedMessage = string.Join("; ", errorMessages); 
+                return new ApiResponse<T>(
+                    success: false,
+                    message: combinedMessage,
+                    data: dto,
+                    statusCode: 400
+                );
+            }
+
             return new ApiResponse<T>(
                 success: true,
                 message: "Validación exitosa",

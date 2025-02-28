@@ -26,18 +26,25 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
             return Ok(result);
         }
 
-        [HttpGet("ObtenerSucursalColaboradores{id}")]
-        public IActionResult ObtenerSucursalColaborador(int id)
+        [HttpGet("ObtenerColaboradoresPorSucursales")]
+        public IActionResult ObtenerColaboradorPorSucursales([FromQuery]int sucursal_id)
         {
-            var result = _sucursalColaboradorService.ObtenerPorId(id);
+            var result = _sucursalColaboradorService.ObtenerColaboradoresPorSucursales(sucursal_id);
+            return Ok(result);
+        }
+
+        [HttpGet("ObtenerColaboradoresPorSucursalesNoAsignados")]
+        public IActionResult ObtenerColaboradoresPorSucursalesNoAsignados([FromQuery] int sucursal_id)
+        {
+            var result = _sucursalColaboradorService.ObtenerColaboradoresPorSucursalesNoAsignados(sucursal_id);
             return Ok(result);
         }
 
         [HttpPost("InsertarSucursalColaborador")]
-        public async Task<IActionResult> InsertarSucursalColaborador([FromBody] SucursalesColaboradoresInsertarDto modelo)
+        public async Task<IActionResult> InsertarSucursalColaborador(SucursalesColaboradoresInsertarDto modelo)
         {
-            //var resultado = await _sucursalColaboradorService.InsertarAsync(modelo);
-            var resultado =  _sucursalColaboradorService.Insertar(modelo);
+            var resultado = await _sucursalColaboradorService.InsertarAsync(modelo);
+            //var resultado =  _sucursalColaboradorService.Insertar(modelo);
             return Ok(resultado);
         }
 

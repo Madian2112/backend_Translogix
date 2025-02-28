@@ -18,10 +18,10 @@
         "environmentVariables": {
             "ASPNETCORE_ENVIRONMENT": "Development",
             "CODIGO_PAIS": "HN",
-            "FS_SQL_SUFASA_SERVER": "192.168.1.33\\academiagfs,49194",
+            "FS_SQL_SUFASA_SERVER": "mssql-193197-0.cloudclusters.net,10081",
             "FS_SQL_SUFASA_DBNAME": "translogix",
-            "FS_SQL_SUFASA_USER": "AcademiaDEV",
-            "FS_SQL_SUFASA_PASSWORD": "Academia.1"
+            "FS_SQL_SUFASA_USER": "Madian",
+            "FS_SQL_SUFASA_PASSWORD": "Madian123"
         }
     },
     "IIS Express": {

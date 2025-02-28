@@ -9,7 +9,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps.Viaj
         public void Configure(EntityTypeBuilder<Transportistas> builder)
         {
             builder.ToTable("Transportistas");
-            builder.HasKey(x => x.tarifa_id);
+            builder.HasKey(x => x.transportista_id);
             builder.Property(x => x.persona_id).IsRequired();
             builder.Property(x => x.tarifa_id).IsRequired();
             builder.Property(x => x.moneda_id).IsRequired();

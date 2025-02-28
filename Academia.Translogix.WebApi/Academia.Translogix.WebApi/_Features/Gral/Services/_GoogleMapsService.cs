@@ -4,6 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Academia.Translogix.WebApi.Infrastructure;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
+using Farsiman.Domain.Core.Standard.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Academia.Translogix.WebApi._Features.Gral.Services
 {
@@ -12,7 +18,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         
-        public GoogleMapsService(IConfiguration configuration)
+        public GoogleMapsService()
         {
             _httpClient = new HttpClient();
             _apiKey = "AIzaSyAhGb5-x69f-4wZABaurBrprU6PHRgXRKk";
@@ -24,38 +30,58 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             public decimal Lng { get; set; }
         }
 
-        //public async Task<double> CalcularDistanciaAsync(Location origen, Location destino)
-        //{
-        //    var url = $"https://maps.googleapis.com/maps/api/distancematrix/json" +
-        //            $"?origins={origen.Lat},{origen.Lng}" +
-        //            $"&destinations={destino.Lat},{destino.Lng}" +
-        //            $"&mode=DRIVING" +
-        //            $"&units=metric" +
-        //            $"&key={_apiKey}";
+        public class LocationInfo
+        {
+            public bool Success { get; set; }
+            public string MensajeError { get; set; }
+            public string DireccionFormateada { get; set; }
+        }
 
-        //    try
-        //    {
-        //        var response = await _httpClient.GetAsync(url);
-        //        response.EnsureSuccessStatusCode();
+        public LocationInfo GetLocationInfoAsync(Location location)
+        {
+            try
+            {
+                string latStr = location.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                string lngStr = location.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-        //        var content = await response.Content.ReadAsStringAsync();
-        //        using JsonDocument document = JsonDocument.Parse(content);
+                string url = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latStr},{lngStr}&key={_apiKey}";
 
-        //        Console.WriteLine("Esta es la respuesta de la calculo desde el servicio: " + document);
+                var response =  _httpClient.GetAsync(url).Result;
+                response.EnsureSuccessStatusCode(); 
 
-        //        var root = document.RootElement;
-        //        var rows = root.GetProperty("rows");
-        //        var elements = rows[0].GetProperty("elements");
-        //        var distance = elements[0].GetProperty("distance");
-        //        var distanceInMeters = distance.GetProperty("value").GetInt32();
+                string responseBody =  response.Content.ReadAsStringAsync().Result;
+                JObject jsonResponse = JObject.Parse(responseBody);
 
-        //        return distanceInMeters / 1000.0; // Convertir a kilómetros
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"Error al calcular la distancia: {ex.Message}");
-        //    }
-        //}
+                string status = jsonResponse["status"].ToString();
+                JArray results = (JArray)jsonResponse["results"];
+
+                if (status != "OK" || results.Count == 0)
+                {
+                    return new LocationInfo
+                    {
+                        Success = false,
+                        MensajeError = $"No se encontraron resultados para las coordenadas: {location.Lat}, {location.Lng}"
+                    };
+                }
+
+                string ciudad = (string)results[2]["address_components"][0]["long_name"];
+                string departamento = (string)results[2]["address_components"][0]["long_name"];
+
+                return new LocationInfo
+                {
+                    Success = true,
+                    DireccionFormateada = ciudad
+                };
+            }
+            catch (Exception ex)
+            {
+                return new LocationInfo
+                {
+                    Success = false,
+                    MensajeError = $"Error al obtener información de ubicación: {ex.Message}"
+                };
+            }
+        }
 
         public async Task<string> CalcularDistanciaAsync(Location origen, Location destino)
         {

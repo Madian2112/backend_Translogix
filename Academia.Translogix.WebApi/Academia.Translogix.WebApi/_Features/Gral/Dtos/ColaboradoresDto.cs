@@ -48,4 +48,36 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         public int usuario_modificacion { get; set; }
         public DateTime fecha_modificacion { get; set; } = DateTime.Now;
     }
+
+    public class ColaboradoresSucursales
+    {
+        public int colaborador_id { get; set; }
+        public int sucursal_id { get; set; }
+        public decimal latitudColaborador { get; set; }
+        public decimal longitudColaborador { get; set; }
+        public decimal latitudSucursal { get; set; }
+        public decimal longitudSucursal { get; set; }
+        public decimal distancia_empleado_sucursal_km { get; set; }
+    }
+
+    public class ColaboradoresSucursalesNoAsignadosDto
+    {
+        public int colaborador_id { get; set; } 
+        public string identidad { get; set; } = string.Empty;
+        public string primer_nombre { get; set; } = string.Empty;
+        public string primer_apellido { get; set; } = string.Empty;
+    }
+
+    public class ColaboradoresSinViaje
+    {
+        public int colaborador_id { get; set; }
+        public string identidad { get; set; } = string.Empty;
+        public string primer_nombre { get; set; } = string.Empty;
+        public string segundo_nombre { get; set; } = string.Empty;
+        public string primer_apellido { get; set; } = string.Empty;
+        public string segundo_apellido { get; set; } = string.Empty;
+        public decimal latitud { get; set; }
+        public decimal longitud { get; set; }
+        public decimal distancia_empleado_sucursal_km { get; set; }
+    }
 }

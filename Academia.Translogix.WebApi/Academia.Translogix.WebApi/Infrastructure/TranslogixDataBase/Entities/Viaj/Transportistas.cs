@@ -8,7 +8,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.
     {
         [Key]
         public int transportista_id { get; set; }
-        public int? moneda_id { get; set; }
+        public int moneda_id { get; set; }
         public int persona_id { get; set; }
         public int tarifa_id { get; set; }
         public int usuario_creacion { get; set; }

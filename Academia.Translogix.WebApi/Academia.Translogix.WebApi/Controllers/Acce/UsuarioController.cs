@@ -31,10 +31,10 @@ namespace Academia.Translogix.WebApi.Controllers.Acce
             return Ok(result);
         }
 
-        [HttpGet("InicioSesion{id}/{clave}")]
-        public IActionResult InicioSesion(int id, string clave)
+        [HttpGet("InicioSesion")]
+        public IActionResult InicioSesion([FromQuery] string usuario, [FromQuery] string clave)
         {
-            var result = _usuarioService.InicioSesion(id,clave);
+            var result = _usuarioService.InicioSesion(usuario, clave);
             return Ok(result);
         }
 

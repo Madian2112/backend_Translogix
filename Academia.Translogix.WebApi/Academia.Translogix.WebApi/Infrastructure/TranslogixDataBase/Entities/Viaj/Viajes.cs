@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj
 {
@@ -26,6 +27,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.
         public Usuarios? UsuarioModificar { get; set; }
 
         public ICollection<Viajes_Detalles> ViajesDetalles { get; set; } = new List<Viajes_Detalles>();
+
 
     }
 }

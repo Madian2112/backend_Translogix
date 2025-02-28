@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Academia.Translogix.WebApi._Features.Acce.Services;
 using Academia.Translogix.WebApi._Features.Gral.Services;
+using Academia.Translogix.WebApi._Features.Reportes.Service;
 using Academia.Translogix.WebApi._Features.Viaj;
 using Academia.Translogix.WebApi._Features.Viaj.Services;
+using Academia.Translogix.WebApi.Common._BaseService;
 
 namespace Academia.Translogix.WebApi.Common
 {
@@ -13,17 +15,24 @@ namespace Academia.Translogix.WebApi.Common
     {
         public static void ConfiguracionServicios(IServiceCollection service)
         {
-            service.AddScoped<UsuarioService>();
-            service.AddScoped<MonedaService>();
-            service.AddScoped<PaisService>();
-            service.AddScoped<SucursalService>();
+            service.AddTransient<UsuarioService>();
+            service.AddTransient<MonedaService>();
+            service.AddTransient<PaisService>();
+            service.AddTransient<SucursalService>();
             service.AddTransient<SucursalColaboradorService>();
-            service.AddScoped<ColaboradorService>();
-            service.AddScoped<CargoService>();
-            service.AddScoped<TarifaService>();
-            service.AddScoped<EstadoCivilService>();
-            service.AddScoped<RolService>();
-            service.AddScoped<GoogleMapsService>();
+            service.AddTransient<ColaboradorService>();
+            service.AddTransient<CargoService>();
+            service.AddTransient<TarifaService>();
+            service.AddTransient<EstadoCivilService>();
+            service.AddTransient<RolService>();
+            service.AddTransient<ViajeService>();
+            service.AddTransient<ReporteService>();
+            service.AddTransient<_OpenRouteService>();
+            service.AddTransient<GeneralDominioService>();
+            service.AddTransient<ReporteDominioService>();
+            service.AddTransient<TransportistaService>(); 
+            service.AddTransient<ViajeDominioService>();
+            service.AddTransient<GoogleMapsService>();
         }
     }
 }
