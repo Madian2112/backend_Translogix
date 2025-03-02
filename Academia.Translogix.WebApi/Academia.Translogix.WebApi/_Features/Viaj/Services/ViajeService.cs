@@ -1,6 +1,7 @@
 ﻿using Academia.Translogix.WebApi._Features.Gral.Dtos;
 using Academia.Translogix.WebApi._Features.Gral.Services;
 using Academia.Translogix.WebApi._Features.Viaj.Dtos;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
 using Academia.Translogix.WebApi.Infrastructure;
@@ -40,11 +41,11 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
                 var listaDto = _mapper.Map<List<ViajesDto>>(lista);
 
-                return ApiResponseHelper.Success(listaDto, "Registros obtenidos con éxito");
+                return ApiResponseHelper.Success(listaDto, Mensajes._02_Registros_Obtenidos);
             }
             catch (Exception ex)
             {
-                var response = ApiResponseHelper.ErrorDto<List<ViajesDto>>("Error al obtener registros: " + ex.Message);
+                var response = ApiResponseHelper.ErrorDto<List<ViajesDto>>(Mensajes._15_Error_Operacion + ex.Message);
                 if (response.Data == null)
                 {
                     response.Data = [];
@@ -62,7 +63,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
                 if (!noNulos.Success)
                 {
-                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>($"No se aceptan valores nulo: {noNulos.Message}");
+                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>($"{Mensajes._06_Valores_Nulos}{noNulos.Message}");
                 }
 
                 var usuarioEntidad = (from usu in _unitOfWork.Repository<Usuarios>().AsQueryable().AsNoTracking()
@@ -71,13 +72,13 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                 bool esNull = _viajeDominioService.esNulo(usuarioEntidad);
                 if (!esNull)
                 {
-                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>("No se encontro ningun registro de usuario para el Id del usuario enviado");
+                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._24_Usuario_No_Encontrado);
                 }
 
                 bool esAdmin = _viajeDominioService.esAdmin(usuarioEntidad);
                 if (!esAdmin)
                 {
-                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>("Solo los usuarios con rol de administrador pueden crear viajes");
+                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._25_Usuario_Administrador);
                 }
 
                 var origin = new double[] { request.Origen.Longitude, request.Origen.Latitude };
@@ -117,7 +118,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                     if (!_unitOfWork.SaveChanges())
                     {
                         _unitOfWork.RollBack();
-                        return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>("Error al realizar la operación");
+                        return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._15_Error_Operacion);
                     }
 
                     var modeloViajeDetalles = viaje.Colaboradores.Select(colaborador => new ViajesDetalleInsertarDto
@@ -138,7 +139,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                     if (!_unitOfWork.SaveChanges())
                     {
                         _unitOfWork.RollBack();
-                        return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>("Error al realizar la operación");
+                        return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._15_Error_Operacion);
                     }
 
                 }
@@ -148,7 +149,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>($"Error al realizar la operación: {ex.Message}");
+                return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>($"{Mensajes._15_Error_Operacion}{ex.Message}");
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Academia.Translogix.WebApi._Features.Gral.Dtos;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
 using Academia.Translogix.WebApi.Common._BaseService;
@@ -52,7 +53,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             {
                 string mensajeValidacionColaborador = colaboradorNoNulos.Success ? "" : colaboradorNoNulos.Message;
                 string mensajeValidacionPersona = personaNoNulo.Success ? "" : personaNoNulo.Message;
-                return ApiResponseHelper.Error($"No se aceptan valores nulos: {mensajeValidacionColaborador} {mensajeValidacionPersona}");
+                return ApiResponseHelper.Error($"{Mensajes._06_Valores_Nulos}{mensajeValidacionColaborador} {mensajeValidacionPersona}");
             }
 
             try
@@ -64,7 +65,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 
                 if(!validarNuloIdentidad)
                 {
-                    return ApiResponseHelper.Error("Ya existe un colaborador con la misma identidad");
+                    return ApiResponseHelper.Error(Mensajes._16_Colaborador_Misma_Identidad);
                 }
 
                 var correoIgual = (from perso in _unitOfWork.Repository<Personas>().AsQueryable().AsNoTracking()
@@ -74,7 +75,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 
                 if (!validarNuloCorreo)
                 {
-                    return ApiResponseHelper.Error("Ya existe un colaborador con el mismo correo");
+                    return ApiResponseHelper.Error(Mensajes._16_Colaborador_Mismo_Correo);
                 }
 
                 _unitOfWork.BeginTransaction();
@@ -92,13 +93,13 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                 _unitOfWork.SaveChanges();
 
                 _unitOfWork.Commit();
-                return ApiResponseHelper.SuccessMessage("Registro guardado con éxito");
+                return ApiResponseHelper.SuccessMessage(Mensajes._07_Registro_Guardado);
             }
 
             catch(Exception ex)
             {
                 _unitOfWork.RollBack();
-                return ApiResponseHelper.Error("No se pudo realizar la operacion: " + ex);
+                return ApiResponseHelper.Error(Mensajes._15_Error_Operacion + ex);
             }
         }
 
@@ -140,12 +141,12 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                              }).ToList();
 
 
-                return ApiResponseHelper.Success<List<ColaboradoresSinViaje>>(query, "Colaboradores obtenidos con exito");
+                return ApiResponseHelper.Success<List<ColaboradoresSinViaje>>(query, Mensajes._02_Registros_Obtenidos);
             }
 
             catch
             {
-                return ApiResponseHelper.ErrorDto<List<ColaboradoresSinViaje>>("Error realizar la operacion");
+                return ApiResponseHelper.ErrorDto<List<ColaboradoresSinViaje>>(Mensajes._15_Error_Operacion);
             }
         }
 

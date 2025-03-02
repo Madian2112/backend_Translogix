@@ -1,4 +1,5 @@
 ﻿using Academia.Translogix.WebApi._Features.Viaj.Dtos;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
 using Academia.Translogix.WebApi.Infrastructure;
@@ -30,11 +31,11 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
                 var listaDto = _mapper.Map<List<TransportistaDto>>(lista);
 
-                return ApiResponseHelper.Success(listaDto, "Registros obtenidos con éxito");
+                return ApiResponseHelper.Success(listaDto, Mensajes._02_Registros_Obtenidos);
             }
             catch (Exception ex)
             {
-                var response = ApiResponseHelper.ErrorDto<List<TransportistaDto>>("Error al obtener registros: " + ex.Message);
+                var response = ApiResponseHelper.ErrorDto<List<TransportistaDto>>(Mensajes._03_Error_Registros_Obtenidos + ex.Message);
                 if (response.Data == null)
                 {
                     response.Data = [];
@@ -56,7 +57,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
             {
                 string mensajeValidacionColaborador = transportistaNoNulos.Success ? "" : transportistaNoNulos.Message;
                 string mensajeValidacionPersona = personaNoNulo.Success ? "" : personaNoNulo.Message;
-                return ApiResponseHelper.Error($"No se aceptan valores nulos: {mensajeValidacionColaborador} {mensajeValidacionPersona}");
+                return ApiResponseHelper.Error($"{Mensajes._06_Valores_Nulos} {mensajeValidacionColaborador} {mensajeValidacionPersona}");
             }
 
             try
@@ -68,7 +69,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
                 if (identidadIgual != null)
                 {
-                    return ApiResponseHelper.Error("Ya existe un colaborador con la misma identidad");
+                    return ApiResponseHelper.Error(Mensajes._16_Colaborador_Misma_Identidad);
                 }
 
                 _unitOfWork.BeginTransaction();
@@ -86,13 +87,13 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                 _unitOfWork.SaveChanges();
 
                 _unitOfWork.Commit();
-                return ApiResponseHelper.SuccessMessage("Registro guardado con éxito");
+                return ApiResponseHelper.SuccessMessage(Mensajes._07_Registro_Guardado);
             }
 
             catch(Exception ex)
             {
                 _unitOfWork.RollBack();
-                return ApiResponseHelper.Error("No se pudo realizar la operacion: " + ex);
+                return ApiResponseHelper.Error(Mensajes._15_Error_Operacion + ex);
             }
         }
     }

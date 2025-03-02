@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Academia.Translogix.WebApi._Features.Gral.Dtos;
 using Academia.Translogix.WebApi._Features.Viaj;
 using Academia.Translogix.WebApi._Features.Viaj.Dtos;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
 using Academia.Translogix.WebApi.Common._BaseService;
@@ -55,7 +56,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                     var noNulos = BaseDomainHelpers.ValidarCamposNulosVacios(item);
                     if (!noNulos.Success)
                     {
-                        return ApiResponseHelper.ErrorDto<List<string>>("No se aceptan valores nulos: " + noNulos.Message);
+                        return ApiResponseHelper.ErrorDto<List<string>>(Mensajes._06_Valores_Nulos + noNulos.Message);
                     }
                 }
 
@@ -76,7 +77,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 
                     if (resulColaboradores == null || resulSucursales == null)
                     {
-                        resultados.Add("Colaborador o sucursal no encontrados");
+                        resultados.Add(Mensajes._17_Colaborador_Sucursal_No_Encontrado);
                         continue;
                     }
 
@@ -90,7 +91,11 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 
                     if (resultSucursalesColaborador != null)
                     {
-                        resultados.Add($"No se puede asignar un colaborador a la misma sucursal 2 veces para el colaborador: {colaboradores.primer_nombre} {colaboradores.primer_apellido}" );
+                        resultados.Add(string.Format(
+                                        Mensajes._18_Colaborador_Sucursal_Duplicada,
+                                        colaboradores.primer_nombre,
+                                        colaboradores.primer_apellido
+                                    ));
                         continue; 
                     }
 
@@ -106,12 +111,20 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                         var entidadModelo = _mapper.Map<Sucursales_Colaboradores>(sucursalColaborador);
                         _unitOfWork.Repository<Sucursales_Colaboradores>().Add(entidadModelo);
                         var resultadoInsercion = await _unitOfWork.SaveChangesAsync();
-                        resultados.Add(resultadoInsercion ? $"Registro insertado correctamente para el colaborador: { colaboradores.primer_nombre} { colaboradores.primer_apellido}" :
-                                                            $"No se pudo insertar correctamente parra colaborador: { colaboradores.primer_nombre} { colaboradores.primer_apellido}");
-                    }
+                                resultados.Add(
+                                    resultadoInsercion
+                                    ? string.Format(Mensajes._19_Colaborador_Insertado, colaboradores.primer_nombre, colaboradores.primer_apellido)
+                                    : string.Format(Mensajes._20_Error_Colaborador_Insertar, colaboradores.primer_nombre, colaboradores.primer_apellido)
+                                ); }
                     else
                     {
-                        resultados.Add($"La distancia entre la casa del colaborador no puede ser 0 ni mayor de 50km para el colaborador:   {colaboradores.primer_nombre} {colaboradores.primer_apellido}");
+                        resultados.Add(
+                                string.Format(
+                                    Mensajes._21_Colaborador_Distancia_Invalida,
+                                    colaboradores.primer_nombre,
+                                    colaboradores.primer_apellido
+                                )
+                            );                    
                     }
                 }
 
@@ -119,7 +132,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.ErrorDto<List<string>>("Error al procesar la lista: " + ex.Message );
+                return ApiResponseHelper.ErrorDto<List<string>>(Mensajes._15_Error_Operacion + ex.Message );
             }
         }
 

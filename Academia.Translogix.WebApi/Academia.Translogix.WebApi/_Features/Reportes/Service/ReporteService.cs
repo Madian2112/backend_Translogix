@@ -1,5 +1,6 @@
 ﻿using Academia.Translogix.WebApi._Features.Gral.Dtos;
 using Academia.Translogix.WebApi._Features.Reportes.Dtos;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
 using Academia.Translogix.WebApi.Infrastructure;
@@ -31,7 +32,7 @@ namespace Academia.Translogix.WebApi._Features.Reportes.Service
                 var colaboradorNoNulos = BaseDomainHelpers.ValidarCamposNulosVacios(reporteInsertar);
                 if (!colaboradorNoNulos.Success)
                 {
-                    return ApiResponseHelper.ErrorDto<List<ReporteDto>>("No se aceptan valores nulos: " + colaboradorNoNulos.Message);
+                    return ApiResponseHelper.ErrorDto<List<ReporteDto>>(Mensajes._06_Valores_Nulos + colaboradorNoNulos.Message);
                 }
 
                 var resulTransportistas = (from tran in _unitOfWork.Repository<Transportistas>().AsQueryable().AsNoTracking()
@@ -40,7 +41,7 @@ namespace Academia.Translogix.WebApi._Features.Reportes.Service
                 var esNulo = _dominioService.esNulo(resulTransportistas);
                 if (!esNulo)
                 {
-                    return ApiResponseHelper.ErrorDto<List<ReporteDto>>("No se encontro ningun transportista con ese Id");
+                    return ApiResponseHelper.ErrorDto<List<ReporteDto>>(Mensajes._23_Transportista_No_Encontrada);
                 }
 
                 var viajesQuery = ObtenerConsultaBaseDeViajes();
@@ -52,7 +53,7 @@ namespace Academia.Translogix.WebApi._Features.Reportes.Service
             }
             catch (Exception e)
             {
-                return ApiResponseHelper.ErrorDto<List<ReporteDto>>("Error realizar la operacion");
+                return ApiResponseHelper.ErrorDto<List<ReporteDto>>(Mensajes._15_Error_Operacion);
             }
         }
 

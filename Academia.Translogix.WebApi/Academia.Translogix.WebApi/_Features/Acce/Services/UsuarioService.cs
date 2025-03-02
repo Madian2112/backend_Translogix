@@ -1,4 +1,5 @@
 ﻿using Academia.Translogix.WebApi._Features.Acce.Dtos;
+using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
 using Academia.Translogix.WebApi.Common._BaseService;
@@ -42,7 +43,7 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
             var usuarioNoNulos = BaseDomainHelpers.ValidarCamposNulosVacios(modelo);
             if (!usuarioNoNulos.Success)
             {
-                return ApiResponseHelper.Error($"No se aceptan valores nulos: {usuarioNoNulos.Message}");
+                return ApiResponseHelper.Error($"{Mensajes._06_Valores_Nulos}{usuarioNoNulos.Message}");
             }
             modelo.clave = ConvertirClave(modelo.claveinput);
             return base.Insertar(modelo);
@@ -63,15 +64,15 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
 
                 if (registro == null)
                 {
-                    return ApiResponseHelper.NotFound<UsuariosDto>("Usuario no encontrado");
+                    return ApiResponseHelper.NotFound<UsuariosDto>(Mensajes._04_Registros_No_Encontrado);
                 }
 
                 var registroDto = _mapper.Map<UsuariosDto>(registro);
-                return ApiResponseHelper.Success(registroDto, "Usuario encontrado");
+                return ApiResponseHelper.Success(registroDto, Mensajes._02_Registros_Obtenidos);
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.ErrorDto<UsuariosDto>($"Error al buscar registro:  {ex.Message}");
+                return ApiResponseHelper.ErrorDto<UsuariosDto>($"{Mensajes._14_Error_Buscar_Registro}{ex.Message}");
             }
         }
 

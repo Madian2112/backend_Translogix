@@ -9,6 +9,7 @@ using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 using AutoMapper;
 using Farsiman.Domain.Core.Standard.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Academia.Translogix.WebApi.Common;
 
 namespace Academia.Translogix.WebApi.Common._BaseService
 {
@@ -35,11 +36,11 @@ namespace Academia.Translogix.WebApi.Common._BaseService
 
                 var listaDto = _mapper.Map<List<TDto>>(lista);
 
-                return ApiResponseHelper.Success(listaDto, "Registros obtenidos con éxito");
+                return ApiResponseHelper.Success(listaDto, Mensajes._02_Registros_Obtenidos);
             }
             catch (Exception ex)
             {
-                var response = ApiResponseHelper.ErrorDto<List<TDto>>("Error al obtener registros: " + ex.Message);
+                var response = ApiResponseHelper.ErrorDto<List<TDto>>(Mensajes._03_Error_Registros_Obtenidos + ex.Message);
                 if (response.Data == null)
                 {
                     response.Data = [];
@@ -72,14 +73,14 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                 var registroDto = _mapper.Map<TDto>(registro);
                 if (registro == null)
                 {
-                    return ApiResponseHelper.NotFound<TDto>("Registro no encontrado");
+                    return ApiResponseHelper.NotFound<TDto>(Mensajes._04_Registros_No_Encontrado);
                 }
 
-                return ApiResponseHelper.Success(registroDto, "Registro encontrado");
+                return ApiResponseHelper.Success(registroDto, Mensajes._04_Registros_No_Encontrado);
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.ErrorDto<TDto>($"Error al buscar registro:  {ex.Message}");
+                return ApiResponseHelper.ErrorDto<TDto>($"{Mensajes._05_Error_Buscar_Registro}{ex.Message}");
             }
         }
 
@@ -91,18 +92,18 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                 var result = BaseDomainHelpers.ValidarCamposNulosVacios(modelo);
                 if(!result.Success)
                 {
-                    return ApiResponseHelper.Error("No se aceptan valores nulos");
+                    return ApiResponseHelper.Error(Mensajes._06_Valores_Nulos);
                 }
 
                 var entidad = _mapper.Map<T>(modelo);
                 _unitOfWork.Repository<T>().Add(entidad);
                 _unitOfWork.SaveChanges();
 
-                return ApiResponseHelper.SuccessMessage("Registro guardado con éxito");
+                return ApiResponseHelper.SuccessMessage(Mensajes._07_Registro_Guardado);
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.Error("Error al guardar: " + ex.Message);
+                return ApiResponseHelper.Error(Mensajes._08_Error_Guardado + ex.Message);
             }
         }
 
@@ -113,24 +114,24 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                 var result = BaseDomainHelpers.ValidarCamposNulosVacios(modelo);
                 if (!(result.StatusCode == 2000))
                 {
-                    return ApiResponseHelper.Error("No se aceptan valores nulos");
+                    return ApiResponseHelper.Error(Mensajes._06_Valores_Nulos);
                 }
 
                 var registroExistente = _unitOfWork.Repository<T>().AsQueryable().Select(x => x.Equals(id));
 
                 if (registroExistente == null)
                 {
-                    return ApiResponseHelper.NotFound<string>("Registro no encontrado");
+                    return ApiResponseHelper.NotFound<string>(Mensajes._04_Registros_No_Encontrado);
                 }
 
                 _mapper.Map(modelo, registroExistente);
                 _unitOfWork.SaveChanges();
 
-                return ApiResponseHelper.SuccessMessage("Registro actualizado con éxito");
+                return ApiResponseHelper.SuccessMessage(Mensajes._09_Registro_Actualizado);
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.Error("Error al actualizar: " + ex.Message);
+                return ApiResponseHelper.Error(Mensajes._10_Error_Actualizado + ex.Message);
             }
         }
 
@@ -143,14 +144,14 @@ namespace Academia.Translogix.WebApi.Common._BaseService
 
                 if (registro == null)
                 {
-                    return ApiResponseHelper.NotFound<string>("Registro no encontrado");
+                    return ApiResponseHelper.NotFound<string>(Mensajes._04_Registros_No_Encontrado);
                 }
 
                 var propiedadActivo = registro.GetType().GetProperty("es_activo");
 
                 if (propiedadActivo == null)
                 {
-                    return ApiResponseHelper.Error("El registro no tiene la propiedad es_activo");
+                    return ApiResponseHelper.Error(Mensajes._11_Propiedad_Activo_No_Encontrada);
                 }
 
                 propiedadActivo.SetValue(registro, esActivo);
@@ -160,7 +161,7 @@ namespace Academia.Translogix.WebApi.Common._BaseService
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.Error("Error al eliminar: " + ex.Message);
+                return ApiResponseHelper.Error(Mensajes._13_Error_Eliminado + ex.Message);
             }
         }
         public ApiResponse<string> EliminarCompletamente(int id)
