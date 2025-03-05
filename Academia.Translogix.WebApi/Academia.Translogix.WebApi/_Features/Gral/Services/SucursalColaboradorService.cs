@@ -75,7 +75,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                                               where col.colaborador_id == entidad.colaborador_id
                                               select col).FirstOrDefault();
 
-                    if (resulColaboradores == null || resulSucursales == null)
+                    if (!BaseDomainHelpers.ValidadObtenerDatosNulos(resulSucursales).Success || !BaseDomainHelpers.ValidadObtenerDatosNulos(resulColaboradores).Success)
                     {
                         resultados.Add(Mensajes._17_Colaborador_Sucursal_No_Encontrado);
                         continue;

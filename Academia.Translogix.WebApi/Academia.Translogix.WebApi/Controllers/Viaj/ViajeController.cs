@@ -37,7 +37,7 @@ namespace Academia.Translogix.WebApi.Controllers.Viaj
         [HttpPost("InsertarViaje")]
         public async Task<IActionResult> InsertarViaje([FromBody] ViajesModeloInsertarDto request)
         {
-            var result = await _viajeService.AgruparCrearRutas(request);
+            var result = await _viajeService.CrearViajes(request);
             return Ok(result);
         }
 

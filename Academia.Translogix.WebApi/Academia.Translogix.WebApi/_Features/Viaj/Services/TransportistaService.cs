@@ -1,4 +1,7 @@
-﻿using Academia.Translogix.WebApi._Features.Viaj.Dtos;
+﻿using Academia.Translogix.WebApi._Features.Gral.Requirement;
+using Academia.Translogix.WebApi._Features.Gral.Services;
+using Academia.Translogix.WebApi._Features.Viaj.Dtos;
+using Academia.Translogix.WebApi._Features.Viaj.Requirement;
 using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
@@ -16,11 +19,18 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly CommonService _commonService;
+        private readonly GeneralDominioService _generalDominioService;
+        private readonly ViajeDominioService _viajeDominioService;
 
-        public TransportistaService(UnitOfWorkBuilder unitOfWork, IMapper mapper)
+        public TransportistaService(UnitOfWorkBuilder unitOfWork, IMapper mapper, CommonService commonService, 
+                                    GeneralDominioService generalDominioService, ViajeDominioService viajeDominioService)
         {
             _unitOfWork = unitOfWork.BuildDbTranslogix();
             _mapper = mapper;
+            _commonService = commonService;
+            _generalDominioService = generalDominioService;
+            _viajeDominioService = viajeDominioService;
         }
 
         public ApiResponse<List<TransportistaDto>> ObtenerTodos()
@@ -46,12 +56,8 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
         public ApiResponse<string> InserTransportistaPersona(TransportistaInsertarDto modelo)
         {
-            var transportista = modelo.Transportista;
-            var persona = modelo.Persona;
-            persona.usuario_creacion = transportista.usuario_creacion;
-
-            var transportistaNoNulos = BaseDomainHelpers.ValidarCamposNulosVacios(transportista);
-            var personaNoNulo = BaseDomainHelpers.ValidarCamposNulosVacios(persona);
+            var transportistaNoNulos = BaseDomainHelpers.ValidarCamposNulosVacios(modelo.Transportista);
+            var personaNoNulo = BaseDomainHelpers.ValidarCamposNulosVacios(modelo.Persona);
 
             if (!transportistaNoNulos.Success || !personaNoNulo.Success)
             {
@@ -62,28 +68,37 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
             try
             {
+                Transportistas mappTransportista = _mapper.Map<Transportistas>(modelo.Transportista);
+                Personas mappPersona = _mapper.Map<Personas>(modelo.Persona);
 
-                var identidadIgual = (from perso in _unitOfWork.Repository<Personas>().AsQueryable().AsNoTracking()
-                                      where perso.identidad == persona.identidad
-                                      select perso).FirstOrDefault();
 
-                if (identidadIgual != null)
-                {
-                    return ApiResponseHelper.Error(Mensajes._16_Colaborador_Misma_Identidad);
-                }
+
+                bool identidadIgual = _commonService.IdentidadIgual(mappPersona.identidad);
+                bool monedaExistente = _commonService.EntidadExistente<Monedas>(mappTransportista.moneda_id);
+                bool tarifaExistente = _commonService.EntidadExistente<Tarifas>(mappTransportista.tarifa_id);
+                bool paisExistente = _commonService.EntidadExistente<Paises>(mappPersona.pais_id);
+
+                PersonasDomainRequirement domainreqPersona = PersonasDomainRequirement.Fill(paisExistente);
+                TransportistasDomainRequirement domainreqTransportista = TransportistasDomainRequirement.Fill(identidadIgual, monedaExistente, cargoExistente);
+
+                var resulDomainPersona = _generalDominioService.CrearPersona(mappPersona, domainreqPersona);
+                var resultDomainTransportista = _viajeDominioService.CrearTransportista(mappTransportista, domainreqTransportista);
+
+                if(!resulDomainPersona.Success)
+                    return ApiResponseHelper.Error(resulDomainPersona.Message);
+
+                if(!resultDomainTransportista.Success)
+                    return ApiResponseHelper.Error(resultDomainTransportista.Message);
+
+                Personas personas = resulDomainPersona.Data;
+                Transportistas transportistas = resultDomainTransportista.Data;
+                
+                personas.usuario_creacion = transportistas.usuario_creacion;
+                personas.Transportistas = new List<Transportistas> { transportistas };
 
                 _unitOfWork.BeginTransaction();
 
-                var entidadPersona = _mapper.Map<Personas>(persona);
-
-                _unitOfWork.Repository<Personas>().Add(entidadPersona);
-                _unitOfWork.SaveChanges();
-
-                transportista.persona_id = entidadPersona.persona_id;
-                var entidadTransportista = _mapper.Map<Transportistas>(transportista);
-
-
-                _unitOfWork.Repository<Transportistas>().Add(entidadTransportista);
+                _unitOfWork.Repository<Personas>().Add(personas);
                 _unitOfWork.SaveChanges();
 
                 _unitOfWork.Commit();

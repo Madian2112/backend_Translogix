@@ -10,12 +10,7 @@ namespace Academia.Translogix.WebApi._Features.Reportes.Service
         }
         public bool ValidarFechas(DateTime? fechaInicio, DateTime? fechaFin)
         {
-            if (fechaInicio.HasValue && fechaFin.HasValue && fechaInicio > fechaFin)
-            {
-                throw new ArgumentException("La fecha de inicio no puede ser mayor que la fecha de fin.");
-            }
-
-            return true;
+            return fechaInicio.HasValue && fechaFin.HasValue && fechaInicio > fechaFin ? false : true;
         }
 
         public bool FiltrarPorFechas(DateTime? fechaCreacion, DateTime? fechaInicio, DateTime? fechaFin)

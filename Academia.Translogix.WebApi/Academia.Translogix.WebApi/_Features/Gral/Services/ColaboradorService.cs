@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Academia.Translogix.WebApi._Features.Gral.Dtos;
+using Academia.Translogix.WebApi._Features.Gral.Requeriment;
+using Academia.Translogix.WebApi._Features.Gral.Requirement;
 using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Common._ApiResponses;
 using Academia.Translogix.WebApi.Common._BaseDomain;
@@ -17,6 +19,7 @@ using Farsiman.Domain.Core.Standard.Repositories;
 using Farsiman.Infraestructure.Core.Entity.Standard;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Identity.Client;
 using static Academia.Translogix.WebApi._Features.Gral.Services.GoogleMapsService;
 
 namespace Academia.Translogix.WebApi._Features.Gral.Services
@@ -27,27 +30,25 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
         private readonly TranslogixDBContext _contextT;
         private readonly IMapper _mapper;
         private readonly GoogleMapsService _googleMapsService;
-        private readonly GeneralDominioService _generalDominioService;  
+        private readonly GeneralDominioService _generalDominioService;
+        private readonly CommonService _commonService;
 
         public ColaboradorService(UnitOfWorkBuilder unitOfWork , IMapper mapper, 
                                   TranslogixDBContext translogixDBContext, GoogleMapsService googleMapsService,
-                                  GeneralDominioService generalDominioService)
+                                  GeneralDominioService generalDominioService, CommonService commonService)
         {
             _unitOfWork = unitOfWork.BuildDbTranslogix();
             _contextT = translogixDBContext;
             _mapper = mapper;
             _googleMapsService = googleMapsService;
             _generalDominioService = generalDominioService;
+            _commonService = commonService;
         }
-
         public ApiResponse<string> InsertarColaboradorPersona(ColaboradoresDtoInsertar modeloInsertar)
         {
-            var colaborador = modeloInsertar.Colaborador;
-            var persona = modeloInsertar.Persona;
-            persona.usuario_creacion = colaborador.usuario_creacion;
 
-            var colaboradorNoNulos = BaseDomainHelpers.ValidarCamposNulosVacios(colaborador);
-            var personaNoNulo = BaseDomainHelpers.ValidarCamposNulosVacios(persona);
+            var colaboradorNoNulos = BaseDomainHelpers.ValidarCamposNulosVacios(modeloInsertar.Colaborador);
+            var personaNoNulo = BaseDomainHelpers.ValidarCamposNulosVacios(modeloInsertar.Persona);
 
             if(!colaboradorNoNulos.Success || !personaNoNulo.Success)
             {
@@ -55,41 +56,41 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                 string mensajeValidacionPersona = personaNoNulo.Success ? "" : personaNoNulo.Message;
                 return ApiResponseHelper.Error($"{Mensajes._06_Valores_Nulos}{mensajeValidacionColaborador} {mensajeValidacionPersona}");
             }
-
+           
             try
             {
-                var identidadIgual = (from perso in _unitOfWork.Repository<Personas>().AsQueryable().AsNoTracking()
-                                      where perso.identidad == persona.identidad
-                                      select perso).FirstOrDefault();
-                var validarNuloIdentidad = _generalDominioService.esNuloPersona(identidadIgual);
+                Personas mappPersona = _mapper.Map<Personas>(modeloInsertar.Persona);
+                Colaboradores mappColaborador = _mapper.Map<Colaboradores>(modeloInsertar.Colaborador);
 
-                if(!validarNuloIdentidad)
-                {
-                    return ApiResponseHelper.Error(Mensajes._16_Colaborador_Misma_Identidad);
-                }
+                bool identidadIgual = _commonService.IdentidadIgual(mappPersona.identidad);
+                bool correoIgual = _commonService.CorreoIgual(mappPersona.correo_electronico);
+                bool estadoCivilExistente = _commonService.EntidadExistente<Estados_Civiles>(mappColaborador.estado_civil_id);
+                bool cargoExistente = _commonService.EntidadExistente<Cargos>(mappColaborador.cargo_id);
+                bool paisExistente = _commonService.EntidadExistente<Paises>(mappPersona.pais_id);
 
-                var correoIgual = (from perso in _unitOfWork.Repository<Personas>().AsQueryable().AsNoTracking()
-                                      where perso.correo_electronico == persona.correo_electronico
-                                      select perso).FirstOrDefault();
-                var validarNuloCorreo = _generalDominioService.esNuloPersona(correoIgual);
+                PersonasDomainRequirement domainreqPersona = PersonasDomainRequirement.Fill(paisExistente);
+                ColaboradoresDomainRequirement domainreqColaborador = ColaboradoresDomainRequirement.Fill(identidadIgual, correoIgual, estadoCivilExistente, cargoExistente);
 
-                if (!validarNuloCorreo)
-                {
-                    return ApiResponseHelper.Error(Mensajes._16_Colaborador_Mismo_Correo);
-                }
+                var resulDomainPersona = _generalDominioService.CrearPersona(mappPersona, domainreqPersona);
+                var resulDomainColaborador = _generalDominioService.CrearColaborador(mappColaborador, domainreqColaborador);
+
+
+                if (!resulDomainPersona.Success)
+                    return ApiResponseHelper.Error(resulDomainPersona.Message);
+
+                if (!resulDomainColaborador.Success)
+                    return ApiResponseHelper.Error(resulDomainColaborador.Message);
+
+
+                Personas personas = resulDomainPersona.Data;
+                Colaboradores colaboradores = resulDomainColaborador.Data;
+
+                personas.usuario_creacion = colaboradores.usuario_creacion;
+                personas.Colaboradores = new List<Colaboradores> { colaboradores };
 
                 _unitOfWork.BeginTransaction();
 
-                var entidadPersona = _mapper.Map<Personas>(persona);
-
-                _unitOfWork.Repository<Personas>().Add(entidadPersona);
-                _unitOfWork.SaveChanges();
-
-                colaborador.persona_id = entidadPersona.persona_id;
-                var entidadColaborador = _mapper.Map<Colaboradores>(colaborador);
-
-                
-                _unitOfWork.Repository<Colaboradores>().Add(entidadColaborador);
+                _unitOfWork.Repository<Personas>().Add(personas);
                 _unitOfWork.SaveChanges();
 
                 _unitOfWork.Commit();
@@ -107,13 +108,8 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
         {
             try
             {
-                var resulSucursales = (from su in _unitOfWork.Repository<Sucursales>().AsQueryable().AsNoTracking()
-                                       where su.sucursal_id == sucursal_id
-                                       select su).FirstOrDefault();
-                if (resulSucursales == null)
-                {
-                    return ApiResponseHelper.ErrorDto<List<ColaboradoresSinViaje>>("No se encontro ninguna sucursal con ese Id");
-                }
+                if (!_commonService.EntidadExistente<Sucursales>(sucursal_id))
+                    return ApiResponseHelper.ErrorDto<List<ColaboradoresSinViaje>>(Mensajes._22_Sucursal_No_Encontrada);
 
                 var query = (from co in _unitOfWork.Repository<Colaboradores>().AsQueryable()
                              join sucu in _unitOfWork.Repository<Sucursales_Colaboradores>().AsQueryable() on co.colaborador_id equals sucu.colaborador_id

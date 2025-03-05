@@ -54,7 +54,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
             }
         }
 
-        public async Task<ApiResponse<List<RutaAgrupadaResponse>>> AgruparCrearRutas(ViajesModeloInsertarDto request)
+        public async Task<ApiResponse<List<RutaAgrupadaResponse>>> CrearViajes(ViajesModeloInsertarDto request)
         {
             try
             {
@@ -69,14 +69,13 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                 var usuarioEntidad = (from usu in _unitOfWork.Repository<Usuarios>().AsQueryable().AsNoTracking()
                                       where usu.usuario_id == request.usuario_creacion
                                       select usu).FirstOrDefault();
-                bool esNull = _viajeDominioService.esNulo(usuarioEntidad);
-                if (!esNull)
+                bool esNull = _viajeDominioService.esNuloPersona(usuarioEntidad);
+                if (esNull)
                 {
                     return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._24_Usuario_No_Encontrado);
                 }
 
-                bool esAdmin = _viajeDominioService.esAdmin(usuarioEntidad);
-                if (!esAdmin)
+                if (!usuarioEntidad.es_admin)
                 {
                     return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._25_Usuario_Administrador);
                 }
@@ -89,7 +88,10 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                     colaborador_id = u.colaborador_id
                 }).ToList();
 
-
+                if(ubicaciones == null || !ubicaciones.Any())
+                {
+                    return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(Mensajes._26_Ubicacion_Requerida);
+                }
 
                 var result = await _openRouteService.AgruparRutasPorDistanciaAsync(origin, ubicaciones, request.transportista);
                 var conteo = result.RutasAgrupadas.Count;

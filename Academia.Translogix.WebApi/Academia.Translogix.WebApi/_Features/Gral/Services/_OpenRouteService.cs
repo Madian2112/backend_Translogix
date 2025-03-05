@@ -29,9 +29,6 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
         List<UbicacionesViaje> ubicaciones,
         List<Transportista> transportistas)
         {
-            if (ubicaciones == null || !ubicaciones.Any())
-                throw new ArgumentException("Se requiere al menos una ubicación.");
-
             var todasLasCoordenadas = new List<double[]> { origen };
             todasLasCoordenadas.AddRange(ubicaciones.Select(u => u.Ubicaciones));
 

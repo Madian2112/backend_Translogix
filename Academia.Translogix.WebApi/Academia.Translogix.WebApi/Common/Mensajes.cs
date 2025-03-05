@@ -31,5 +31,9 @@ namespace Academia.Translogix.WebApi.Common
         public const string _21_Colaborador_Distancia_Invalida = "La distancia entre la casa del colaborador no puede ser 0 ni mayor de 50km para el colaborador: {0} {1}";
         public const string _22_Sucursal_No_Encontrada = "No se encontro ninguna sucursal con ese Id";
         public const string _23_Transportista_No_Encontrada = "No se encontro ningun transportista con ese Id";
+        public const string _24_Usuario_No_Encontrado = "No se encontro ningun Usuario con ese Id";
+        public const string _25_Usuario_Administrador = "Solo los usuarios que son administrador pueden registrar viajes";
+        public const string _26_Ubicacion_Requerida = "Se requiere al menos una ubicacion";
+        public const string _27_Validar_Sexo_F_M = "El sexo debe ser masculino o femenino";
     }
 }

@@ -73,5 +73,15 @@ namespace Academia.Translogix.WebApi.Common._BaseDomain
                 statusCode: 200
             );
         }
+
+        public static ApiResponse<T> ValidadObtenerDatosNulos<T>(T dto) 
+        {
+            return new ApiResponse<T>(
+                success: dto == null ? false : true,
+                message: dto == null ? "Datos nulos" : "Datos no nulos",
+                data: dto,
+                statusCode: 404 
+            );
+        }
     }
 }

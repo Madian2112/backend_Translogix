@@ -33,6 +33,7 @@ namespace Academia.Translogix.WebApi.Common
             service.AddTransient<TransportistaService>(); 
             service.AddTransient<ViajeDominioService>();
             service.AddTransient<GoogleMapsService>();
+            service.AddTransient<CommonService>();
         }
     }
 }

@@ -65,7 +65,7 @@ namespace Academia.Translogix.WebApi.Common._BaseService
                         break;
                     }
                 }
-
+                    
                 var registro = _unitOfWork.Repository<T>().AsQueryable().AsNoTracking()
                             .FirstOrDefault(x => EF.Property<int>(x, pkId) == id);
 
