@@ -1,4 +1,6 @@
-﻿namespace Academia.Translogix.WebApi._Features.Gral.Requeriment
+﻿using System.Collections.Generic;
+
+namespace Academia.Translogix.WebApi._Features.Gral.Requeriment
 {
     public class ColaboradoresDomainRequirement
     {
@@ -23,7 +25,7 @@
 
         public string ObtenerMensajesError()
         {
-            var errors = new List<string>();
+            List<string> errors = new List<string>();
 
             if (!IdentidadIgual)
                 errors.Add("Ya existe un colaborador con la misma identidad.");

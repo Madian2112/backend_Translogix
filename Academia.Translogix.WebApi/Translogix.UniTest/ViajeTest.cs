@@ -53,5 +53,24 @@ namespace Translogix.UniTest
             // Con Fluent Assertions
             result.Should().Be(expected);
         }
+
+        [Theory]
+        [ClassData(typeof(ViajeTestData_DominioRequeriments))]
+        public void ValidarDtoParaCrearViajeEncabezado_Booleano(Viajes entidad, ViajesDomainRequirement requirement,
+            bool expected)
+        {
+            //Arrange
+            //Given: Configuramos el estado inicial y creamos las dependencias necesarias
+
+            ViajeDominioService _viajeDominioService = new ViajeDominioService();
+
+            //Act
+            //when : Ejecutamos la accion o el metodo que queremos probar.
+
+            bool result = _viajeDominioService.CrearViaje(entidad, requirement).Success;
+
+            // Con Fluent Assertions
+            result.Should().Be(expected);
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps.Gral

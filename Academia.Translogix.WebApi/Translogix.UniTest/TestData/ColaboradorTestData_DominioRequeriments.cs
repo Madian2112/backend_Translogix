@@ -23,91 +23,59 @@ namespace Translogix.UniTest.TestData
             Add(ColaboradorLatitudCero(), RequirementCorrecto(), false);
             Add(ColaboradorLatitudFormatoInvalido(), RequirementCorrecto(), false);
             Add(ColaboradorLongitudCero(), RequirementCorrecto(), false);
+            Add(ColaboradorFechaValida(), RequirementCorrecto(), true);
 
         }
-        public Colaboradores ColaboradorCorrecto()
-            => new Colaboradores
+        public Colaboradores ColaboradorCorrecto(Action<Colaboradores>? configure = null)
+        {
+            var colaborador = new Colaboradores
             {
                 cargo_id = 1,
                 estado_civil_id = 2,
                 fecha_nacimiento = DateTime.Now,
                 latitud = (decimal)215.005,
-                longitud = (decimal)22.11,
+                longitud = (decimal)22.11
             };
+            configure?.Invoke(colaborador);
+            return colaborador;
+        }
 
         public Colaboradores ColaboradorLatitudCero()
-        => new Colaboradores
-        {
-            cargo_id = 1,
-            estado_civil_id = 2,
-            fecha_nacimiento = DateTime.ParseExact("31/12/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture),
-            latitud = 0,
-            longitud = (decimal)215.15
-        };
+            => ColaboradorCorrecto(x => x.latitud = 0);
 
         public Colaboradores ColaboradorLatitudFormatoInvalido()
-        => new Colaboradores
-        {
-            cargo_id = 1,
-            estado_civil_id = 2,
-            fecha_nacimiento = DateTime.ParseExact("31/12/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture),
-            latitud = (decimal)12345.1234567890123456,
-            longitud = (decimal)215.15
-        };
+        => ColaboradorCorrecto(x => x.latitud = (decimal)12345.1234567890123456);
 
         public Colaboradores ColaboradorLongitudCero()
-        => new Colaboradores
-        {
-            cargo_id = 1,
-            estado_civil_id = 2,
-            fecha_nacimiento = DateTime.ParseExact("31/12/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture),
-            latitud = (decimal)215.15,
-            longitud = 0
-        };
+        => ColaboradorCorrecto(x => x.longitud = 0);
 
-        public ColaboradoresDomainRequirement RequirementCorrecto()
-            => new ColaboradoresDomainRequirement
+        public Colaboradores ColaboradorFechaValida()
+            => ColaboradorCorrecto(x => x.fecha_nacimiento = DateTime.Parse("31-12-2023"));
+
+        public ColaboradoresDomainRequirement RequirementCorrecto(Action<ColaboradoresDomainRequirement>? configure = null)
+        {
+            var requirement = new ColaboradoresDomainRequirement
             {
                 CargoExistente = true,
-                CorreoIgual = true, 
+                CorreoIgual = true,
                 EstadoCivilExistente = true,
                 IdentidadIgual = true
             };
+
+            configure?.Invoke(requirement);
+            return requirement;
+        }
 
         public ColaboradoresDomainRequirement RequirementCargoExistenteFalse()
-            => new ColaboradoresDomainRequirement
-            {
-                CargoExistente = false,
-                CorreoIgual = true,
-                EstadoCivilExistente = true,
-                IdentidadIgual = true
-            };
+            => RequirementCorrecto(x => x.CargoExistente = false);
 
         public ColaboradoresDomainRequirement RequirementCorreoIgualFalse()
-            => new ColaboradoresDomainRequirement
-            {
-                CargoExistente = true,
-                CorreoIgual = false,
-                EstadoCivilExistente = true,
-                IdentidadIgual = true
-            };
+            => RequirementCorrecto(x => x.CorreoIgual = false);
 
         public ColaboradoresDomainRequirement RequirementEstadoCivilExistenteFalse()
-            => new ColaboradoresDomainRequirement
-            {
-                CargoExistente = true,
-                CorreoIgual = true,
-                EstadoCivilExistente = false,
-                IdentidadIgual = true
-            };
+            => RequirementCorrecto(x => x.EstadoCivilExistente = false);
 
         public ColaboradoresDomainRequirement RequirementIdentidadIgualFalse()
-            => new ColaboradoresDomainRequirement
-            {
-                CargoExistente = true,
-                CorreoIgual = true,
-                EstadoCivilExistente = true,
-                IdentidadIgual = false
-            };
+            => RequirementCorrecto(x => x.IdentidadIgual = false);
     }
 }

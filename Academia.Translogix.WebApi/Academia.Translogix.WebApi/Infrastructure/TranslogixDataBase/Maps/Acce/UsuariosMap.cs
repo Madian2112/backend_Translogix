@@ -1,4 +1,5 @@
-﻿using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+﻿using System.Diagnostics.CodeAnalysis;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

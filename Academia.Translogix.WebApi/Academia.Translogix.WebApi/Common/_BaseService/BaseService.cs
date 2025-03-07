@@ -40,7 +40,19 @@ namespace Academia.Translogix.WebApi.Common._BaseService
             }
             catch (Exception ex)
             {
-                var response = ApiResponseHelper.ErrorDto<List<TDto>>(Mensajes._03_Error_Registros_Obtenidos + ex.Message);
+                int statusCode = 400; // Por defecto, Bad Request
+                string errorMessage = Mensajes._03_Error_Registros_Obtenidos + ex.Message;
+
+                // Ejemplo: Detectar errores de base de datos
+                if (ex is Microsoft.Data.SqlClient.SqlException ||
+                    ex.Message.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("database", StringComparison.OrdinalIgnoreCase))
+                {
+                    statusCode = 500; // Error de servidor para problemas de base de datos
+                    errorMessage = "Error de base de datos: " + ex.Message;
+                }
+
+                var response = new ApiResponse<List<TDto>>(false, errorMessage, default, statusCode);
                 if (response.Data == null)
                 {
                     response.Data = [];
@@ -187,23 +199,23 @@ namespace Academia.Translogix.WebApi.Common._BaseService
             }
         }
 
-        public async Task<string> TranslateToSpanish(string text)
-        {
-            using HttpClient client = new HttpClient();
-            // Construir la URL con el texto a traducir y el par de idiomas (en a es)
-            string url = $"https://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair=en|es";
+        //public async Task<string> TranslateToSpanish(string text)
+        //{
+        //    using HttpClient client = new HttpClient();
+        //    // Construir la URL con el texto a traducir y el par de idiomas (en a es)
+        //    string url = $"https://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair=en|es";
 
-            // Obtener la respuesta en formato JSON
-            string json = await client.GetStringAsync(url);
+        //    // Obtener la respuesta en formato JSON
+        //    string json = await client.GetStringAsync(url);
 
-            // Parsear el JSON y extraer la traducción
-            using JsonDocument document = JsonDocument.Parse(json);
-            string translatedText = document.RootElement
-                                            .GetProperty("responseData")
-                                            .GetProperty("translatedText")
-                                            .GetString();
+        //    // Parsear el JSON y extraer la traducción
+        //    using JsonDocument document = JsonDocument.Parse(json);
+        //    string translatedText = document.RootElement
+        //                                    .GetProperty("responseData")
+        //                                    .GetProperty("translatedText")
+        //                                    .GetString();
 
-            return translatedText;
-        }
+        //    return translatedText;
+        //}
     }
 }

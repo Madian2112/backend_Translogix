@@ -15,6 +15,14 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 {
     public class GoogleMapsService
     {
+
+        public interface IGoogleMapsService
+        {
+            LocationInfo GetLocationInfoAsync(Location location);
+            Task<string> CalcularDistanciaAsync(Location origen, Location destino);
+        }
+
+
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         

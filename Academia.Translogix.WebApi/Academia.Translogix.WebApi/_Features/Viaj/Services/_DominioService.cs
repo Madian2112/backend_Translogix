@@ -36,5 +36,24 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                 statusCode: 200
             );
         }
+
+        public ApiResponse<Viajes> CrearViaje(Viajes entidad, ViajesDomainRequirement requirement)
+        {
+
+            if (!requirement.IsValid())
+                return new ApiResponse<Viajes>(
+                success: false,
+                message: requirement.ObtenerMensajesError(),
+                data: null,
+                statusCode: 404
+                );
+
+            return new ApiResponse<Viajes>(
+                success: true,
+                message: "Dto de viaje validado correctamente",
+                data: entidad,
+                statusCode: 200
+            );
+        }
     }
 }

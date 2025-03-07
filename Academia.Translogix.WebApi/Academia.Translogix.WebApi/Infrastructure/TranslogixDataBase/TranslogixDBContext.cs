@@ -10,6 +10,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase
 {
     public class TranslogixDBContext : DbContext
     {
+        private readonly IHostEnvironment _environment;
         public TranslogixDBContext(DbContextOptions<TranslogixDBContext> options) : base(options)
         {
         }
@@ -34,6 +35,15 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //if (_environment.IsEnvironment("test"))
+            //{
+            //    // Deshabilitar las claves foráneas en el entorno de pruebas
+            //    foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            //    {
+            //        relationship.DeleteBehavior = DeleteBehavior.ClientNoAction; // Ignorar acciones de eliminación
+            //    }
+            //}
+
             modelBuilder.ApplyConfiguration(new CargosMap());
             modelBuilder.ApplyConfiguration(new ColaboradoresMap());
             modelBuilder.ApplyConfiguration(new EstadosCivilesMap());

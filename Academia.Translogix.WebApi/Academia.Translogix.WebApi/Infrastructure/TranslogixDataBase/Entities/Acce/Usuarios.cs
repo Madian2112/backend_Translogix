@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce
 {
+    [ExcludeFromCodeCoverage]
     public class Usuarios
     {
         [Key]

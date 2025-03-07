@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
+    [ExcludeFromCodeCoverage]
     public class Paises
     {
         [Key]

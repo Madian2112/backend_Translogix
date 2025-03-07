@@ -30,36 +30,26 @@ namespace Translogix.UniTest.TestData
                 tarifa_id = 2,
             };
 
-        public TransportistasDomainRequirement RequirementCorrecto()
-            => new TransportistasDomainRequirement
+        public TransportistasDomainRequirement RequirementCorrecto(Action<TransportistasDomainRequirement>? configure = null)
+        {
+            var requirement = new TransportistasDomainRequirement
             {
                 IdentidadIgual = true,
                 MonedaExistente = true,
                 TarifaExistente = true,
             };
+
+            configure?.Invoke(requirement);
+            return requirement;
+        }
 
         public TransportistasDomainRequirement RequirementIdentidadIgualFalse()
-            => new TransportistasDomainRequirement
-            {
-                IdentidadIgual = false,
-                MonedaExistente = true,
-                TarifaExistente = true,
-            };
+            => RequirementCorrecto(x => x.IdentidadIgual = false);
 
         public TransportistasDomainRequirement RequirementMonedaExistenteFalse()
-            => new TransportistasDomainRequirement
-            {
-                IdentidadIgual = true,
-                MonedaExistente = false,
-                TarifaExistente = true,
-            };
+            => RequirementCorrecto(x => x.MonedaExistente = false);
 
         public TransportistasDomainRequirement RequirementTarifaExistenteFalse()
-            => new TransportistasDomainRequirement
-            {
-                IdentidadIgual = true,
-                MonedaExistente = true,
-                TarifaExistente = false,
-            };
+            => RequirementCorrecto(x => x.TarifaExistente = false);
     }
 }

@@ -69,7 +69,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
 
             return new ApiResponse<Personas>(
                 success: listaErrorMensajes.Count > 0 ? false: true,
-                message: listaErrorMensajes.Count > 0 ? mensajesError :  "Dto de persona validado correctamente",
+                message: listaErrorMensajes.Count > 0 ? mensajesError :  "Persona validado correctamente",
                 data: entidad,
                 statusCode: listaErrorMensajes.Count > 0 ? 406 :  200
             );
@@ -103,9 +103,6 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             if (!Regex.IsMatch(latitudStr, @"^-?\d{1,4}(\.\d{0,15})?$"))
                 listaErrorMensajes.Add("El campo latitud debe tener máximo 4 dígitos enteros y 15 decimales.");
 
-            if (!DateTime.TryParseExact(entidad.fecha_nacimiento.ToString().Split(" ")[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
-                listaErrorMensajes.Add("El campo fecha debe estar en formato dd/MM/yyyy (ej: 31/12/2023).");
-
             if (listaErrorMensajes.Count > 0)
             {
                 mensajesError = string.Join("\n ", listaErrorMensajes);
@@ -118,5 +115,6 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                 statusCode: listaErrorMensajes.Count > 0 ? 406 : 200
             );
         }
+
     }
 }

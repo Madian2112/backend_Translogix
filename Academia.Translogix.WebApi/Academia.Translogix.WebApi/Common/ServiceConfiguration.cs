@@ -30,6 +30,7 @@ namespace Academia.Translogix.WebApi.Common
             service.AddTransient<_OpenRouteService>();
             service.AddTransient<GeneralDominioService>();
             service.AddTransient<ReporteDominioService>();
+            service.AddTransient<AccesoDominioService>();
             service.AddTransient<TransportistaService>(); 
             service.AddTransient<ViajeDominioService>();
             service.AddTransient<GoogleMapsService>();

@@ -79,7 +79,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
                 bool paisExistente = _commonService.EntidadExistente<Paises>(mappPersona.pais_id);
 
                 PersonasDomainRequirement domainreqPersona = PersonasDomainRequirement.Fill(paisExistente);
-                TransportistasDomainRequirement domainreqTransportista = TransportistasDomainRequirement.Fill(identidadIgual, monedaExistente, cargoExistente);
+                TransportistasDomainRequirement domainreqTransportista = TransportistasDomainRequirement.Fill(identidadIgual, tarifaExistente, monedaExistente);
 
                 var resulDomainPersona = _generalDominioService.CrearPersona(mappPersona, domainreqPersona);
                 var resultDomainTransportista = _viajeDominioService.CrearTransportista(mappTransportista, domainreqTransportista);

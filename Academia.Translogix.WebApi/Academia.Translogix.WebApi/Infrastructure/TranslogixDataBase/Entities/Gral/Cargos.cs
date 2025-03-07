@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
+    [ExcludeFromCodeCoverage]
     public class Cargos
     {
         [Key]

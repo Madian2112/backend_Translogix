@@ -17,10 +17,10 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
         }
 
         [HttpGet("ObtenerPaises")]
-        public IActionResult ObtenerPaises()
+        public async Task<IActionResult> ObtenerPaises()
         {
             var result = _paisService.ObtenerTodos();
-            return Ok(result);
+            return StatusCode(result.StatusCode,result);
         }
 
         [HttpGet("ObtenerPaises{id}")]
@@ -34,28 +34,7 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
         public IActionResult InsertarPais([FromBody] PaisesDtoInsertar modelo)
         {
             var result = _paisService.Insertar(modelo);
-            return Ok(result);
-        }
-
-        [HttpPut("ActualizarPais{id}")]
-        public IActionResult ActualizarPais(int id, [FromBody] PaisesDtoActualizar modelo)
-        {
-            var result = _paisService.Actualizar(id, modelo);
-            return Ok(result);
-        }
-
-        [HttpPatch("EliminadoLogico{id}/{prop}")]
-        public IActionResult EliminadoLogico(int id, bool prop = false)
-        {
-            var result = _paisService.EliminadoLogico(id, prop);
-            return Ok(result);
-        }
-
-        [HttpDelete("EliminarPais{id}")]
-        public IActionResult EliminarPais(int id)
-        {
-            var result = _paisService.EliminarCompletamente(id);
-            return Ok(result);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }

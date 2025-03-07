@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
 
 namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 {
+    [ExcludeFromCodeCoverage]
     public class Colaboradores
     {
         [Key]
@@ -29,7 +31,6 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.
         public ICollection<Usuarios> Usuarios { get; set; } = new List<Usuarios>();
         public ICollection<Sucursales_Colaboradores> SucursalesColaboradores { get; set; } = new List<Sucursales_Colaboradores>();
         public ICollection<Viajes_Detalles> ViajesDetalles { get; set; } = new List<Viajes_Detalles>();
-
 
     }
 }
