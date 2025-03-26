@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-translogix-pod
+  namespace: academia
+spec:
+  containers:
+    - name: webapi
+      image: harbor-01.docker-registry.grupofarsiman.io/academia/api-translogix:v5
+      ports:
+        - containerPort: 8080
+      env:
+        # - name: FS_SQL_SUFASA_SERVER
+        #   value: 192.168.1.33\\academiagfs,49194
+        # - name: FS_SQL_SUFASA_DBNAME
+        #   value: translogix
+        # - name: FS_SQL_SUFASA_USER
+        #   value: AcademiaDEV
+        # - name: FS_SQL_SUFASA_PASSWORD
+        #   value: Academia.1

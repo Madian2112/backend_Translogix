@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Academia.Translogix.WebApi._Features.Gral.Dtos;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Acce;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral;
 
 namespace Academia.Translogix.WebApi._Features.Acce.Dtos
 {
@@ -13,6 +16,11 @@ namespace Academia.Translogix.WebApi._Features.Acce.Dtos
         public bool es_activo { get; set; }
         public int rol_id { get; set; }
         public int colaborador_id { get; set; }
+        public string rol { get; set; }
+        public string cargo{ get; set; }
+        public ColaboradoresDto Colaborador { get; set; }
+        public PersonasDto Persona { get; set; }
+
     }
 
     public class UsuariosDtoInsertar
@@ -37,5 +45,11 @@ namespace Academia.Translogix.WebApi._Features.Acce.Dtos
         public DateTime fecha_modificacion { get; set; } = DateTime.Now;
         public int rol_id { get; set; }
         public int colaborador_id { get; set; }
+    }
+
+    public class UsuarioInicioSesion
+    {
+        public string usuario { get; set; }
+        public string clave { get; set; }
     }
 }

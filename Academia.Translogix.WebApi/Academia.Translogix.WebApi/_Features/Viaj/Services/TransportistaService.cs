@@ -33,11 +33,13 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
             _viajeDominioService = viajeDominioService;
         }
 
-        public ApiResponse<List<TransportistaDto>> ObtenerTodos()
+        public ApiResponse<List<TransportistaDto>> ObtenerTodos()   
         {
             try
             {
-                var lista = _unitOfWork.Repository<Transportistas>().AsQueryable().AsNoTracking().ToList();
+                var lista = _unitOfWork.Repository<Transportistas>().AsQueryable().AsNoTracking()
+                    .Include(p => p.Persona)
+                    .Include(t => t.Tarifa);
 
                 var listaDto = _mapper.Map<List<TransportistaDto>>(lista);
 

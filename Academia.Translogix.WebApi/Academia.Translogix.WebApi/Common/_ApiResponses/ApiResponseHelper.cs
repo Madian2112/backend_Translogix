@@ -3,13 +3,13 @@
 
     public static class ApiResponseHelper
     {
-        public static ApiResponse<T> Success<T>(T data, string message = "Operación exitosa")
+        public static ApiResponse<T> Success<T>(T data, string message = "Operación exitosa", int statusCode = 200)
         {
             var response = new ApiResponse<T>(
                 success: true,
                 message: message,
                 data: data,
-                statusCode: 200
+                statusCode: statusCode
             );
             return response;
         }
@@ -21,6 +21,17 @@
                 message: message,
                 data: null,
                 statusCode: 200
+            );
+            return response;
+        }
+
+        public static ApiResponse<T> ErrorList<T>(T data, string message = "Operación exitosa")
+        {
+            var response = new ApiResponse<T>(
+                success: true,
+                message: message,
+                data: data,
+                statusCode: 400
             );
             return response;
         }
@@ -54,6 +65,17 @@
                 message: message,
                 data: default,
                 statusCode: 404
+            );
+            return response;
+        }
+
+        public static ApiResponse<T> Unauthorized<T>(string message = "No encontrado")
+        {
+            var response = new ApiResponse<T>(
+                success: false,
+                message: message,
+                data: default,
+                statusCode: 401
             );
             return response;
         }

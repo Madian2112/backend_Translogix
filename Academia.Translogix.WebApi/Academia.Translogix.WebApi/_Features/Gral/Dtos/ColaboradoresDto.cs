@@ -16,6 +16,9 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         public int cargo_id { get; set; }
         public int persona_id { get; set; }
         public bool es_activo { get; set; }
+        public PersonasDto Persona { get; set; }
+        public CargosDto Cargo { get; set; }
+        public EstadosCivilesDto EstadoCivil { get; set; }
     }
 
     public class ColaboradoresInsertar
@@ -58,6 +61,8 @@ namespace Academia.Translogix.WebApi._Features.Gral.Dtos
         public decimal latitudSucursal { get; set; }
         public decimal longitudSucursal { get; set; }
         public decimal distancia_empleado_sucursal_km { get; set; }
+        public string primer_nombre { get; set; } = string.Empty;
+        public string primer_apellido { get; set; } = string.Empty;
     }
 
     public class ColaboradoresSucursalesNoAsignadosDto

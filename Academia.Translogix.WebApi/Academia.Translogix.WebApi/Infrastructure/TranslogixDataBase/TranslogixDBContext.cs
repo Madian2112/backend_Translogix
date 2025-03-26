@@ -10,7 +10,7 @@ namespace Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase
 {
     public class TranslogixDBContext : DbContext
     {
-        private readonly IHostEnvironment _environment;
+        //private  IHostEnvironment _environment;
         public TranslogixDBContext(DbContextOptions<TranslogixDBContext> options) : base(options)
         {
         }

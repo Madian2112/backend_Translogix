@@ -3,6 +3,7 @@ using Academia.Translogix.WebApi._Features.Gral.Services;
 using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
+using AutoMapper;
 using Farsiman.Domain.Core.Standard.Repositories;
 using Farsiman.Extensions.Configuration;
 using Farsiman.Infraestructure.Core.Entity.Standard;
@@ -52,22 +53,25 @@ public class Program
 
         var isTesting = builder.Environment.IsEnvironment("test");
 
+
         if (!isTesting)
         {
-            builder.Services.AddDbContext<TranslogixDBContext>(options =>
-            {
-                builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(
-                         builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")),
-                         ServiceLifetime.Scoped);
-            });
 
-            //builder.Services.AddScoped<IUnitOfWork>(serviceProvider =>
+            builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("LOGISTIC_GFS")));
+
+            //builder.Services.AddDbContext<TranslogixDBContext>(options =>
             //{
-            //    var dbContext = serviceProvider.GetRequiredService<TranslogixDBContext>();
-            //    return new UnitOfWork(dbContext);
+            //    builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(
+            //             builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")),
+            //             ServiceLifetime.Scoped);
             //});
 
-            builder.Services.AddScoped<UnitOfWorkBuilder>();
+            builder.Services.AddScoped<IUnitOfWork>(serviceProvider =>
+            {
+                var dbContext = serviceProvider.GetRequiredService<TranslogixDBContext>();
+                return new UnitOfWork(dbContext);
+            });
+
         }
 
 
@@ -76,6 +80,7 @@ public class Program
         ServiceConfiguration.ConfiguracionServicios(builder.Services);
 
 
+        builder.Services.AddScoped<UnitOfWorkBuilder>();
         // Instancia del mapeado
         builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

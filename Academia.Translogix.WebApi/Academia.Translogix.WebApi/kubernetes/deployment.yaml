@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-translogix-deployment
+  namespace: academia
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-translogix
+  template:
+    metadata:
+      labels:
+        app: api-translogix
+    spec:
+      containers:
+        - name: webapi
+          image: harbor-01.docker-registry.grupofarsiman.io/academia/api-translogix:v5
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://*:80
+            - name: MI_CONTRASENIA
+              valueFrom:
+                secretKeyRef:
+                  name: { { $value.scretName } }
+                  key: { { $value.scretKey } }

@@ -7,7 +7,8 @@
             bool colaboradorExistente
             ) => new UsuariosDomainRequirement
             {
-
+                RolExistente = rolExistente,
+                ColaboradorExistente = colaboradorExistente
             };
 
         public bool RolExistente { get; set; }

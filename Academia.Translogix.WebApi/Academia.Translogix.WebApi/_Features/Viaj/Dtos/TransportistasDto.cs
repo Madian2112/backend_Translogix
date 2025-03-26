@@ -11,6 +11,8 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Dtos
             public int persona_id { get; set; }
             public int tarifa_id { get; set; }
             public bool es_activo { get; set; }
+            public TarifasDto Tarifa { get; set; }
+            public PersonasDto Persona { get; set; }
         }
 
         public class TransportistaInsertar

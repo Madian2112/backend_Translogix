@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Academia.Translogix.WebApi._Features.Gral.Dtos;
 
 namespace Academia.Translogix.WebApi._Features.Viaj.Dtos
 {
@@ -11,6 +12,8 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Dtos
         public int sucursal_id { get; set; }
         public int usuario_id { get; set; }
         public bool es_activo { get; set; }
+        public SucursalesDto sucursal { get; set; }
+        public PersonasDto transportista { get; set; }
     }
         public class ViajesModeloInsertarDto
         {

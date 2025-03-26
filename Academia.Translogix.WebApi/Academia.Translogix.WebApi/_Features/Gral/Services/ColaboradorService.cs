@@ -44,6 +44,43 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             _generalDominioService = generalDominioService;
             _commonService = commonService;
         }
+
+        public ApiResponse<List<ColaboradoresDto>> ObtenerTodos()
+        {
+            try
+            {
+                List<Colaboradores>? lista = _unitOfWork.Repository<Colaboradores>().AsQueryable()
+                    .Include(p => p.Persona)
+                    .Include(c => c.Cargo)
+                    .Include(estc => estc.EstadoCivil).ToList();
+
+                var listaDto = _mapper.Map<List<ColaboradoresDto>>(lista);
+
+                return ApiResponseHelper.Success(listaDto, Mensajes._02_Registros_Obtenidos);
+            }
+            catch (Exception ex)
+            {
+                int statusCode = 400; // Por defecto, Bad Request
+                string errorMessage = Mensajes._03_Error_Registros_Obtenidos + ex.Message;
+
+                // Ejemplo: Detectar errores de base de datos
+                if (ex is Microsoft.Data.SqlClient.SqlException ||
+                    ex.Message.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("database", StringComparison.OrdinalIgnoreCase))
+                {
+                    statusCode = 500; // Error de servidor para problemas de base de datos
+                    errorMessage = "Error de base de datos: " + ex.Message;
+                }
+
+                var response = new ApiResponse<List<ColaboradoresDto>>(false, errorMessage, default, statusCode);
+                if (response.Data == null)
+                {
+                    response.Data = [];
+                }
+                return response;
+            }
+        }
+
         public ApiResponse<string> InsertarColaboradorPersona(ColaboradoresDtoInsertar modeloInsertar)
         {
 

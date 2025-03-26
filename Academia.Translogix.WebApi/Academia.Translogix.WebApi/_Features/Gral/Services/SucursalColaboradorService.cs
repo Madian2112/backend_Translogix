@@ -61,6 +61,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                 }
 
                 var resultados = new List<string>(); 
+                var resultadosExitosos = new List<string>();
 
                 foreach (var sucursalColaborador in modelo.SucursalesColaboradores)
                 {
@@ -111,11 +112,22 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                         var entidadModelo = _mapper.Map<Sucursales_Colaboradores>(sucursalColaborador);
                         _unitOfWork.Repository<Sucursales_Colaboradores>().Add(entidadModelo);
                         var resultadoInsercion = await _unitOfWork.SaveChangesAsync();
-                                resultados.Add(
-                                    resultadoInsercion
-                                    ? string.Format(Mensajes._19_Colaborador_Insertado, colaboradores.primer_nombre, colaboradores.primer_apellido)
-                                    : string.Format(Mensajes._20_Error_Colaborador_Insertar, colaboradores.primer_nombre, colaboradores.primer_apellido)
-                                ); }
+
+                        if (resultadoInsercion)
+                        {
+                            resultadosExitosos.Add(
+                                string.Format(Mensajes._19_Colaborador_Insertado, colaboradores.primer_nombre, colaboradores.primer_apellido)
+                            );
+                        }
+
+                        else
+                        {
+                            resultados.Add(
+                                string.Format(Mensajes._20_Error_Colaborador_Insertar, colaboradores.primer_nombre, colaboradores.primer_apellido)
+                            );
+                        }
+                    }
+
                     else
                     {
                         resultados.Add(
@@ -124,11 +136,16 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                                     colaboradores.primer_nombre,
                                     colaboradores.primer_apellido
                                 )
-                            );                    
+                            );
                     }
                 }
 
-                return ApiResponseHelper.Success(resultados);
+                if (resultados.Count > 0)
+                {
+                    return ApiResponseHelper.Success(resultados, "Operacion Fallida", 400);
+                }
+
+                return ApiResponseHelper.Success(resultadosExitosos);
             }
             catch (Exception ex)
             {
@@ -168,6 +185,8 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
             try
             {
                 var resultado = (from col in _unitOfWork.Repository<Colaboradores>().AsQueryable().AsNoTracking()
+                                 join perso in _unitOfWork.Repository<Personas>().AsQueryable().AsNoTracking()
+                                    on col.persona_id equals perso.persona_id
                                  join suc in _unitOfWork.Repository<Sucursales_Colaboradores>().AsQueryable().AsNoTracking()
                                      on col.colaborador_id equals suc.colaborador_id
                                  join su in _unitOfWork.Repository<Sucursales>().AsQueryable().AsNoTracking()
@@ -184,7 +203,9 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
                                      latitudColaborador = col.latitud,
                                      longitudColaborador = col.longitud,
                                      latitudSucursal = su.latitud,
-                                     longitudSucursal = su.longitud
+                                     longitudSucursal = su.longitud,
+                                     primer_nombre =  perso.primer_nombre, 
+                                     primer_apellido = perso.primer_apellido
                                  }).ToList();
 
                 return ApiResponseHelper.Success(resultado, "Datos Obtenidos");

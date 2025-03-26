@@ -20,12 +20,12 @@ namespace Academia.Translogix.WebApi.Controllers.Gral
             _colaboradorService = colaboradorService;
         }
 
-        //[HttpGet("ObtenerColaboradores")]
-        //public IActionResult ObtenerColaboradores()
-        //{
-        //    var result = _colaboradorService.ObtenerTodos();
-        //    return Ok(result);
-        //}
+        [HttpGet("ObtenerColaboradores")]
+        public IActionResult ObtenerColaboradores()
+        {
+            var result = _colaboradorService.ObtenerTodos();
+            return Ok(result);
+        }
 
         //[HttpGet("ObtenerColaboradores{id}")]
         //public IActionResult ObtenerColaborador(int id)

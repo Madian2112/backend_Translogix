@@ -35,5 +35,6 @@ namespace Academia.Translogix.WebApi.Common
         public const string _25_Usuario_Administrador = "Solo los usuarios que son administrador pueden registrar viajes";
         public const string _26_Ubicacion_Requerida = "Se requiere al menos una ubicacion";
         public const string _27_Validar_Sexo_F_M = "El sexo debe ser masculino o femenino";
+        public const string _28_Usuario_Invalido = "Usuario invalido.";
     }
 }

@@ -11,6 +11,8 @@ using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Gral
 using AutoMapper;
 using Farsiman.Domain.Core.Standard;
 using Farsiman.Domain.Core.Standard.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -56,8 +58,8 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
 
                 Usuarios mappUsuario = _mapper.Map<Usuarios>(modelo);
 
-                bool rolExistente = _commonService.EntidadExistente<Usuarios>(mappUsuario.rol_id);
-                bool colaboradorExistente = _commonService.EntidadExistente<Usuarios>(mappUsuario.colaborador_id);
+                bool rolExistente = _commonService.EntidadExistente<Roles>(mappUsuario.rol_id);
+                bool colaboradorExistente = _commonService.EntidadExistente<Colaboradores>(mappUsuario.colaborador_id);
 
                 UsuariosDomainRequirement domainreqUsuarios = UsuariosDomainRequirement.Fill(rolExistente, colaboradorExistente);
 
@@ -86,23 +88,46 @@ namespace Academia.Translogix.WebApi._Features.Acce.Services
             return base.Actualizar(id,modelo);
         }
 
-        public ApiResponse<UsuariosDto> InicioSesion(string usuario, string clave)
+        public ApiResponse<UsuariosDto> InicioSesion(UsuarioInicioSesion modelo)
         {
             try
             {
-                byte[] claveHash = ConvertirClave(clave);
+                byte[] claveHash = ConvertirClave(modelo.clave);
 
-                bool registro = _unitOfWork.Repository<Usuarios>().AsQueryable().Any(x => x.nombre == usuario && x.clave == claveHash);    
+                Usuarios registro = _unitOfWork.Repository<Usuarios>().AsQueryable()
+                    .Include(r => r.Rol)
+                    .Include(c => c.Colaborador)
+                    .ThenInclude(perso => perso.Persona)
+                    .Include(c => c.Colaborador)
+                    .ThenInclude(cargo => cargo.Cargo)
+                    .FirstOrDefault(x => x.nombre == modelo.usuario && x.clave == claveHash);    
 
-                if (!registro)
-                    return ApiResponseHelper.NotFound<UsuariosDto>(Mensajes._04_Registros_No_Encontrado);
+                if (registro == null)
+                    return ApiResponseHelper.Unauthorized<UsuariosDto>(Mensajes._28_Usuario_Invalido);
 
                 var registroDto = _mapper.Map<UsuariosDto>(registro);
                 return ApiResponseHelper.Success(registroDto, Mensajes._02_Registros_Obtenidos);
             }
             catch (Exception ex)
             {
-                return ApiResponseHelper.ErrorDto<UsuariosDto>($"{Mensajes._14_Error_Buscar_Registro}{ex.Message}");
+                int statusCode = 400; // Por defecto, Bad Request
+                string errorMessage = Mensajes._03_Error_Registros_Obtenidos + ex.Message;
+
+                // Ejemplo: Detectar errores de base de datos
+                if (ex is Microsoft.Data.SqlClient.SqlException ||
+                    ex.Message.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("database", StringComparison.OrdinalIgnoreCase))
+                {
+                    statusCode = 500; // Error de servidor para problemas de base de datos
+                    errorMessage = "Error de base de datos: " + ex.Message;
+                }
+
+                var response = new ApiResponse<UsuariosDto>(false, errorMessage, default, statusCode);
+                if (response.Data == null)
+                {
+                    response.Data = null;
+                }
+                return response;
             }
         }
 

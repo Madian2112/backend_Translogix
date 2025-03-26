@@ -49,7 +49,10 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
         {
             try
             {
-                var lista = _unitOfWork.Repository<Viajes>().AsQueryable().AsNoTracking().ToList();
+                var lista = _unitOfWork.Repository<Viajes>().AsQueryable()
+                    .Include(v => v.Sucursal)
+                    .Include(t => t.Transportista).ThenInclude(p => p.Persona)
+                    .ToList();
 
                 var listaDto = _mapper.Map<List<ViajesDto>>(lista);
 
@@ -130,7 +133,7 @@ namespace Academia.Translogix.WebApi._Features.Viaj.Services
 
                     var resultDomainViajes = _viajeDominioService.CrearViaje(mappViaje, domainreqViajes);
 
-                    if(resultDomainViajes.Success)
+                    if(!resultDomainViajes.Success)
                         return ApiResponseHelper.ErrorDto<List<RutaAgrupadaResponse>>(resultDomainViajes.Message);
 
                     Viajes entidadViaje = resultDomainViajes.Data;

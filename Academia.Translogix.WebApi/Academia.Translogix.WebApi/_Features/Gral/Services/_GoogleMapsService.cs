@@ -29,7 +29,7 @@ namespace Academia.Translogix.WebApi._Features.Gral.Services
         public GoogleMapsService()
         {
             _httpClient = new HttpClient();
-            _apiKey = "AIzaSyAhGb5-x69f-4wZABaurBrprU6PHRgXRKk";
+            _apiKey = "AIzaSyBEepHsu6eCFpfdeIzNi6aOD4u_sM2du64";
         }
 
         public class Location
