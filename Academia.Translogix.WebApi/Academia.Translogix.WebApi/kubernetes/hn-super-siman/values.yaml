@@ -1,0 +1,46 @@
+templateVersion: v2
+env:
+  normal:
+    ASPNETCORE_ENVIRONMENT: "Production"
+    ASPNETCORE_URLS: "http://*:80"
+    FS_SQL_SUFASA_DBNAME: translogix
+
+  secret:
+    - name: FS_SQL_SUFASA_USER
+      secretName: academia-sql-connection
+      key: user
+    - name: FS_SQL_SUFASA_PASSWORD
+      secretName: academia-sql-connection
+      key: password
+    - name: FS_SQL_SUFASA_SERVER
+      secretName: academia-sql-connection
+      key: server
+
+defaultRoute:
+  include:
+    entorno: true
+    empresa: false
+    pais: false
+
+customRoute:
+  enabled: true
+  domain: apps.academia-dev.grupofarsiman.io
+  tlsSecretName: tls-dev-academia.grupofarsiman.io
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+appInfo:
+  sistema: "Translogix"
+  equipo: "Academia"
+  tecnologia: "NetCore"
+  app: "TranslogixApi"
+  cluster: k8s-dev
+
+
+
+

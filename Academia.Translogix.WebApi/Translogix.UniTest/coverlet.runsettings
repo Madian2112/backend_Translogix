@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Exclude>
+            [Academia.Translogix.WebApi.Controllers]*
+            [Academia.Translogix.WebApi.*]*Dtos*
+            [Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Maps]*
+    
+          </Exclude>
+          <Include>[Richar.Academia.ProyectoFinal.WebAPI]*</Include>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

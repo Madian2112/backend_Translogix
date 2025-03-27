@@ -1,0 +1,52 @@
+﻿using Academia.Translogix.WebApi._Features.Viaj.Requirement;
+using Academia.Translogix.WebApi.Common._ApiResponses;
+using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase.Entities.Viaj;
+
+namespace Academia.Translogix.WebApi._Features.Viaj.Services
+{
+    public class ViajeDominioService
+    {
+        public bool esNuloPersona<T>(T usuario) where T : class
+        {
+            return usuario == null;
+        }
+
+        public ApiResponse<Transportistas> CrearTransportista(Transportistas entidad, TransportistasDomainRequirement requirement)
+        {
+
+            if (!requirement.IsValid())
+                return new ApiResponse<Transportistas>(
+                success: false,
+                message: requirement.ObtenerMensajesError(),
+                data: entidad,
+                statusCode: 404
+                );
+
+            return new ApiResponse<Transportistas>(
+                success: true,
+                message: "Dto de transportistas validado correctamente",
+                data: entidad,
+                statusCode: 200
+            );
+        }
+
+        public ApiResponse<Viajes> CrearViaje(Viajes entidad, ViajesDomainRequirement requirement)
+        {
+
+            if (!requirement.IsValid())
+                return new ApiResponse<Viajes>(
+                success: false,
+                message: requirement.ObtenerMensajesError(),
+                data: entidad,
+                statusCode: 404
+                );
+
+            return new ApiResponse<Viajes>(
+                success: true,
+                message: "Dto de viaje validado correctamente",
+                data: entidad,
+                statusCode: 200
+            );
+        }
+    }
+}

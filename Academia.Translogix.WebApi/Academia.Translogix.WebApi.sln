@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Academia.Translogix.WebApi", "Academia.Translogix.WebApi\Academia.Translogix.WebApi.csproj", "{15609627-5C90-4156-B095-95B35BB5F4D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translogix.UniTest", "Translogix.UniTest\Translogix.UniTest.csproj", "{20DAC512-DE92-429F-A726-5B716F6FB68C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translogix.IntegrationTests", "Translogix.IntegrationTests\Translogix.IntegrationTests.csproj", "{79CCC1D1-E5C0-48AD-A1A5-91DA0C36DFBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15609627-5C90-4156-B095-95B35BB5F4D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15609627-5C90-4156-B095-95B35BB5F4D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15609627-5C90-4156-B095-95B35BB5F4D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15609627-5C90-4156-B095-95B35BB5F4D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DAC512-DE92-429F-A726-5B716F6FB68C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DAC512-DE92-429F-A726-5B716F6FB68C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DAC512-DE92-429F-A726-5B716F6FB68C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DAC512-DE92-429F-A726-5B716F6FB68C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CCC1D1-E5C0-48AD-A1A5-91DA0C36DFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CCC1D1-E5C0-48AD-A1A5-91DA0C36DFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CCC1D1-E5C0-48AD-A1A5-91DA0C36DFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CCC1D1-E5C0-48AD-A1A5-91DA0C36DFBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://sertfs.grupofarsiman.com/tfs/grupofarsimancollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Academia.Translogix.WebApi\\Academia.Translogix.WebApi.csproj
+		SccProjectName1 = Academia.Translogix.WebApi
+		SccLocalPath1 = Academia.Translogix.WebApi
+		SccProjectUniqueName2 = Translogix.UniTest\\Translogix.UniTest.csproj
+		SccProjectName2 = Translogix.UniTest
+		SccLocalPath2 = Translogix.UniTest
+		SccProjectUniqueName3 = Translogix.IntegrationTests\\Translogix.IntegrationTests.csproj
+		SccProjectName3 = Translogix.IntegrationTests
+		SccLocalPath3 = Translogix.IntegrationTests
+	EndGlobalSection
+EndGlobal
