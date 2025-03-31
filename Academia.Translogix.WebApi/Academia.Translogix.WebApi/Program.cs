@@ -2,6 +2,7 @@ using Academia.Translogix.WebApi.Common;
 using Academia.Translogix.WebApi.Infrastructure;
 using Academia.Translogix.WebApi.Infrastructure.TranslogixDataBase;
 using Farsiman.Domain.Core.Standard.Repositories;
+using Farsiman.Extensions.Configuration;
 using Farsiman.Infraestructure.Core.Entity.Standard;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,7 +50,7 @@ public static class Program
         if (!isTesting)
         {
 
-            builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("LOGISTIC_GFS")));
+            builder.Services.AddDbContext<TranslogixDBContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")));
 
 
             builder.Services.AddScoped<IUnitOfWork>(serviceProvider =>
